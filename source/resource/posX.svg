@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#515151;}
+	.st1{fill:none;stroke:#515151;stroke-width:1.6691;stroke-miterlimit:10;}
+	.st2{fill:#383838;}
+</style>
+<g>
+	<g>
+		<path class="st0" d="M32,3.9l24.3,14V46L32,60.1L7.7,46V18L32,3.9 M32,2L6,17v30l26,15l26-15V17L32,2L32,2z"/>
+	</g>
+	<line class="st1" x1="32" y1="60.7" x2="31.9" y2="30.5"/>
+	<g>
+		<polygon class="st2" points="7.7,17 32,3 56.3,17 31.9,31.2 		"/>
+		<g>
+			<path class="st0" d="M32,3.9L54.7,17L31.9,30.2L9.3,17L32,3.9 M32,2L6,17l25.9,15.2L58,17L32,2L32,2z"/>
+		</g>
+	</g>
+</g>
+</svg>
