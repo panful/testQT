@@ -1,0 +1,4 @@
+﻿QPushButton#btn1 { background-color: red; }
+QPushButton#btn2 {image:url(./resource/undo.svg); min-height:30px; min-width:30px; padding:0px; margin:0px; }
+QToolButton#btn3 {image:url(./resource/posX.svg); min-height:30px; min-width:30px; padding:0px; margin:0px; }
+QLineEdit { background-color: green; }

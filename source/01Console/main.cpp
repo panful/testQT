@@ -8,6 +8,7 @@
 * 6.QClipboard剪贴板
 * 7.QVarLengthArray
 * 8.序列化与反序列化
+* 9.正则表达式
 */
 
 #define TEST9
@@ -338,11 +339,34 @@ int main(int argc,char** argv)
 
 #ifdef TEST9
 
+#include <QCoreApplication>
 #include <QDebug>
+#include <QRegExp>
+#include <QRegularExpression>
+#include <QRegularExpressionMatch>
 
-int main()
+int main(int argc, char* argv[])
 {
+#define PrintResult(str) qDebug() << "Before:\t" << str;qDebug() << "After:\t" << str.replace(reg1, "image:url(./resource/newSvgFile.svg);");qDebug()<<"--------";
+    // 替换
+    {
+        QString r = "image:url(.*);";
+        QString s = "{image:url(./resource/test.svg);this is a svg file.";
+        QString s1 = "{image:url();this is a svg file.";
+        QString s2 = "{image:url(******);this is a svg file.";
+        QString s3 = "{image:url((******);))this is a svg file.";
 
+        QRegularExpression reg1(r);
+
+        PrintResult(s);
+        PrintResult(s1);
+        PrintResult(s2);
+        PrintResult(s3);
+
+    }
+
+
+    return 0;
 }
 
 #endif // TEST9
