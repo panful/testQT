@@ -9,9 +9,10 @@
 * 7.QVarLengthArray
 * 8.序列化与反序列化
 * 9.正则表达式
+* 10 Qt调用js脚本正则表达式匹配中文
 */
 
-#define TEST9
+#define TEST10
 
 #ifdef TEST0
 
@@ -345,16 +346,18 @@ int main(int argc,char** argv)
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 
+// cmake -> Core5Compat
+
 int main(int argc, char* argv[])
 {
 #define PrintResult(str) qDebug() << "Before:\t" << str;qDebug() << "After:\t" << str.replace(reg1, "image:url(./resource/newSvgFile.svg);");qDebug()<<"--------";
     // 替换
     {
         QString r = "image:url(.*);";
-        QString s = "{image:url(./resource/test.svg);this is a svg file.";
-        QString s1 = "{image:url();this is a svg file.";
-        QString s2 = "{image:url(******);this is a svg file.";
-        QString s3 = "{image:url((******);))this is a svg file.";
+        QString s = "{image:url(./resource/test.svg);}this is a svg file.";
+        QString s1 = "{image:url();}this is a svg file.";
+        QString s2 = "{image:url(******);}this is a svg file.";
+        QString s3 = "{image:url((******);}))this is a svg file.";
 
         QRegularExpression reg1(r);
 
@@ -365,8 +368,37 @@ int main(int argc, char* argv[])
 
     }
 
-
     return 0;
 }
 
 #endif // TEST9
+
+#ifdef TEST10
+
+#include <QtCore/QCoreApplication>
+#include <QJSEngine>  // cmake Qml
+#include <QDebug>
+#include <QFile>
+#include <QTextStream>
+
+using namespace std;
+
+int main(int argc, char* argv[])
+{
+    QCoreApplication a(argc, argv);
+    QJSEngine js;
+    QJSValue module = js.importModule("resource/math.mjs");
+    QJSValue sumFunction = module.property("sum");
+    QString str = "38u48djhfod中国，@##@!_)+bia發財";
+    QJSValueList args;
+    args << str;
+    QJSValue result = sumFunction.call(args);
+    if (result.isError())
+    {
+        qDebug() << result.toString();
+        return -1;
+    }
+    qDebug() << result.toBool();
+    return a.exec();
+}
+#endif // TEST10

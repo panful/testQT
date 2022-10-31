@@ -11,13 +11,13 @@
 10.使用智能指针析构函数报错 "can't delete an incomplete type" 因为声明顺序错误，QSpacerItem不能使用智能指针
 11.Qt中信号槽连接六种方式
 12.树控件 QTreeWidget
-13.打印Qt事件，QDockWidget鼠标事件，焦点事件 focus
+13.TEST6 打印Qt事件，QDockWidget鼠标事件，焦点事件 focus
 14.Qt枚举打印字符串QMetaEnum 自定义枚举使用QMetaEnum
 15.自定义QWidget的标题栏
 */
 
 
-#define TEST6
+#define TEST13
 
 #ifdef TEST1
 
@@ -276,32 +276,14 @@ public slots:
 
 #include <QtWidgets>
 #include <QtOpenGLWidgets>
+#include <QColor>
+
 #include <array>
 #include <iostream>
 
 class MyOGL :
     public QOpenGLWidget
 {
-public:
-    //QSize sizeHint() const override
-    //{
-    //    return m_size;
-    //}
-    //QSize minimumSizeHint() const override
-    //{
-    //    return m_minimumSize;
-    //}
-    //void SetCustomSizeHint(const QSize& size)
-    //{
-    //    if (m_size != size)
-    //    {
-    //        m_size = size;
-    //        updateGeometry();
-    //    }
-    //}
-
-    //QSize m_size{ -1,-1 };
-    //QSize m_minimumSize{ 100,80 }; // widget最小的大小
 };
 
 class CustomDockWidget :
@@ -318,6 +300,8 @@ public:
         // 报错：QWidget::setMinimumSize: (/CustomDockWidget) Negative sizes (0,-1) are not possible
         // 设置一下Layout即可
 
+        // 自定义QDockWidget标题栏
+        //-------------------------------------------
         auto combobox = new QComboBox();
         combobox->addItem("111");
         combobox->addItem("222");
@@ -337,6 +321,7 @@ public:
 
         this->setTitleBarWidget(w);
         //this->setTitleBarWidget(new QPushButton("Button"));
+        //--------------------------------------------------
 
         this->layout()->setContentsMargins(0, 0, 0, 0);
         this->layout()->setSpacing(0);
@@ -610,7 +595,7 @@ public slots:
 
         m_viewportMode = i;
     }
-
+    /// @brief 打印所有窗口的信息
     void PrintDockInfo()
     {
         std::cout << std::boolalpha << "   === Dock Infomation ===\n";
@@ -618,15 +603,16 @@ public slots:
         {
             // 注意isHidden和isVisible的区别
             std::cout << std::endl << i << i << i << std::endl;
-            //std::cout << "\t area:" << m_dockWidgets[0]->allowedAreas() << '\n';
+            std::cout << "\t area:" << m_dockWidgets[0]->allowedAreas() << '\n';
             std::cout << "\t show:" << !m_dockWidgets[i]->isHidden() << '\n';
             std::cout << "\t float:" << m_dockWidgets[i]->isFloating() << '\n';
             std::cout << "\t visible:" << m_dockWidgets[i]->isVisible() << '\n';
-            std::cout << "\t width:" << m_dockWidgets[i]->width() << '\n';
-            std::cout << "\t height:" << m_dockWidgets[i]->height() << '\n';
+            //std::cout << "\t width:" << m_dockWidgets[i]->width() << '\n';
+            //std::cout << "\t height:" << m_dockWidgets[i]->height() << '\n';
         }
     }
 
+    /// @brief 将所有窗口复原到QMainWindow
     void DontFloat()
     {
         for (size_t i = 0; i < 4; i++)
@@ -1327,48 +1313,63 @@ class MyOGL :
     public QOpenGLWidget
 {
 public:
-    bool event(QEvent* event) override
+    void SetBackgroundColor()
     {
-        //static int index = 0;
-        //std::cout << index++ << "event\t";
-
-        //QMetaEnum colorEnum = QMetaEnum::fromType<QEvent::Type>();
-        //const char* s = colorEnum.valueToKey(event->type());
-        //std::cout << s << '\n';
-        //std::cout << colorEnum.name() << colorEnum.enumName() << colorEnum.scope() << '\n';
-
-        return QOpenGLWidget::event(event);
-    }
-    virtual void focusInEvent(QFocusEvent* event)
-    {
-        static int index = 0;
-        std::cout << index++ << "in\n";
-        return QOpenGLWidget::focusInEvent(event);
-    }
-    virtual void focusOutEvent(QFocusEvent* event)
-    {
-        static int index = 0;
-        std::cout << index++ << "out\n";
-        return QOpenGLWidget::focusOutEvent(event);
+        std::cout << "set background color\n";
     }
 };
 
 class CustomDockWidget :
     public QDockWidget
 {
-    Q_OBJECT
+    Q_OBJECT;
+
+    //Q_PROPERTY(bool MyProperty READ Test_Q_PROPERTY NOTIFY sigFocus);
 public:
     explicit CustomDockWidget(QWidget* parent = nullptr) :
         QDockWidget(parent)
     {
-        // 等价于事件 QEvent::ZOrderChange
-        //connect(this, SIGNAL(topLevelChanged(bool)), this, SLOT(OnTopLevelChanged(bool)));
+        // 自定义QDockWidget标题栏
+        //-------------------------------------------
+        auto combobox = new QComboBox();
+        combobox->setMinimumSize(50, 30);
+        //combobox->addItem("111");
+        //combobox->addItem("222");
+        //combobox->addItem("333");
+        //combobox->addItem("444");
+
+        m_titleWidget = new QWidget();
+        auto layout = new QHBoxLayout();
+        layout->setSpacing(0);
+        layout->setContentsMargins(0, 0, 0, 0);
+        layout->addWidget(combobox);
+        //layout->addWidget(new QPushButton("aaa"));
+        //layout->addWidget(new QPushButton("bbb"));
+        layout->addSpacerItem(new QSpacerItem(100, 30, QSizePolicy::Expanding, QSizePolicy::Minimum));
+
+        m_titleWidget->setObjectName("MyDockWidget");
+        m_titleWidget->setStyleSheet("QWidget#MyDockWidget{background-color:red;}");
+        m_titleWidget->setLayout(layout);
+        m_titleWidget->setMinimumSize(80, 30);
+
+        this->setTitleBarWidget(m_titleWidget);
+        //this->setTitleBarWidget(new QPushButton("Button"));
+        //--------------------------------------------------
     }
 
     ~CustomDockWidget()
     {
         std::cout << "destroy\n";
     }
+public:
+    void SetTitleWidget()
+    {
+        m_titleWidget->setStyleSheet("QWidget#MyDockWidget{background-color:red;}");
+    }
+
+signals:
+//Q_SIGNALS:
+    void sigMyFocus();
 
 private slots:
     void OnTopLevelChanged(bool topLevel)
@@ -1382,55 +1383,21 @@ private slots:
 
         //std::cout << "floating changed\t" << topLevel << std::endl;
     }
-    void OnVisibitityChanged(bool visible)
-    {
-
-    }
-    void OnAllowedAreasChanged(Qt::DockWidgetArea allowedAreas)
-    {
-
-    }
-    void OnDockLoacationChanged(Qt::DockWidgetArea area)
-    {
-
-    }
-    void OnFeaturesChanged(QDockWidget::DockWidgetFeature fetatures)
-    {
-
-    }
 protected:
     // 为QDockWidget添加最大化、最小化、关闭按钮
     bool event(QEvent* event) override
     {
+        // 打印事件类型
         static int index = 0;
         std::cout << index++ << "event\t";
+        QMetaEnum eventEnum = QMetaEnum::fromType<QEvent::Type>();
+        std::cout << eventEnum.valueToKey(event->type()) << '\n';
 
-        QMetaEnum colorEnum = QMetaEnum::fromType<QEvent::Type>();
-        const char* s = colorEnum.valueToKey(event->type());
-        std::cout << s << '\n';
-
-
-        if (this->windowFlags() & (Qt::WindowCloseButtonHint
-            | Qt::WindowMaximizeButtonHint
-            | Qt::WindowMinimizeButtonHint))
+        if (event->type() == QEvent::Type::MouseButtonPress ||
+            event->type() == QEvent::Type::MouseButtonRelease)
         {
-            return QDockWidget::event(event);
-        }
-
-        // QDockWidget被拖出或者拖入都会触发该事件
-        if (QEvent::ZOrderChange == event->type())
-        {
-            if (this->isFloating()) // 判断是否为浮动窗口
-            {
-                QWidget w;
-                this->setMaximumSize(w.maximumSize()); // 最大化按钮
-                this->setWindowFlags(Qt::Dialog
-                    | Qt::WindowCloseButtonHint
-                    | Qt::WindowMaximizeButtonHint
-                    | Qt::WindowMinimizeButtonHint);
-                this->resize(this->parentWidget()->width() / 2, this->parentWidget()->height() / 2); // 修复从选项卡切换到多窗口显示报错:unable to set geometry
-                this->show();
-            }
+            m_titleWidget->setStyleSheet("QWidget#MyDockWidget{background-color:green;}");
+            emit sigMyFocus();
         }
 
         return QDockWidget::event(event);
@@ -1448,15 +1415,16 @@ protected:
         }
         //return QDockWidget::closeEvent(evt);
     }
-
+private:
+    QWidget* m_titleWidget{ nullptr };
 };
 
-class MyMainWindow :
+class Viewport :
     public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit MyMainWindow(QWidget* parent = nullptr) :
+    explicit Viewport(QWidget* parent = nullptr) :
         QMainWindow(parent)
     {
         // 中间窗体默认为 nullptr
@@ -1467,31 +1435,30 @@ public:
         // 开启该属性后，viewer1和viewer2原本只能水平布局，现在可以想怎样布局就怎样布局
         this->setDockNestingEnabled(true); // 设置嵌套布局为true，默认为false
 
-        //m_dockWidgets[0] = new QDockWidget();
         m_dockWidgets[0] = new CustomDockWidget();
+        connect(m_dockWidgets[0], &CustomDockWidget::sigMyFocus, [this]() {this->PickDock(0); });
         MyOGL* oglWidget0 = new MyOGL();
-        //oglWidget0->SetCustomSizeHint({ 400, 300 });
         m_dockWidgets[0]->setWidget(oglWidget0);
         m_dockWidgets[0]->setWindowTitle("viewer 1");
         m_dockWidgets[0]->setFeatures(m_dockWidgets[0]->features() & ~QDockWidget::DockWidgetClosable);
 
         m_dockWidgets[1] = new CustomDockWidget();
+        connect(m_dockWidgets[1], &CustomDockWidget::sigMyFocus, [this]() {this->PickDock(1); });
         MyOGL* oglWidget1 = new MyOGL();
-        //oglWidget1->SetCustomSizeHint({ 400, 300 });
         m_dockWidgets[1]->setWidget(oglWidget1);
         m_dockWidgets[1]->setWindowTitle("viewer 2");
         m_dockWidgets[1]->setFeatures(m_dockWidgets[1]->features() & ~QDockWidget::DockWidgetClosable);
 
         m_dockWidgets[2] = new CustomDockWidget();
+        connect(m_dockWidgets[2], &CustomDockWidget::sigMyFocus, [this]() {this->PickDock(2); });
         MyOGL* oglWidget2 = new MyOGL();
-        //oglWidget2->SetCustomSizeHint({ 400, 300 });
         m_dockWidgets[2]->setWidget(oglWidget2);
         m_dockWidgets[2]->setWindowTitle("viewer 3");
         m_dockWidgets[2]->setFeatures(m_dockWidgets[2]->features() & ~QDockWidget::DockWidgetClosable);
 
         m_dockWidgets[3] = new CustomDockWidget();
+        connect(m_dockWidgets[3], &CustomDockWidget::sigMyFocus, [this]() {this->PickDock(3); });
         MyOGL* oglWidget3 = new MyOGL();
-        //oglWidget3->SetCustomSizeHint({ 400, 300 });
         m_dockWidgets[3]->setWidget(oglWidget3);
         m_dockWidgets[3]->setWindowTitle("viewer 4");
         m_dockWidgets[3]->setFeatures(m_dockWidgets[3]->features() & ~QDockWidget::DockWidgetClosable);
@@ -1500,12 +1467,6 @@ public:
         this->addDockWidget(Qt::TopDockWidgetArea, m_dockWidgets[1]);
         this->addDockWidget(Qt::BottomDockWidgetArea, m_dockWidgets[2]);
         this->addDockWidget(Qt::BottomDockWidgetArea, m_dockWidgets[3]);
-
-        // dockWidget允许停靠的位置，不设置好像哪里也都可以停靠
-        //m_dockWidgets[0]->setAllowedAreas(Qt::AllDockWidgetAreas);
-        //m_dockWidgets[1]->setAllowedAreas(Qt::AllDockWidgetAreas);
-        //m_dockWidgets[2]->setAllowedAreas(Qt::AllDockWidgetAreas);
-        //m_dockWidgets[3]->setAllowedAreas(Qt::AllDockWidgetAreas);
 
         // 禁止标签页方式停靠
         this->setDockOptions(this->dockOptions() & ~DockOption::AllowTabbedDocks);
@@ -1659,8 +1620,39 @@ public slots:
         }
     }
 
+    void PickDock(int x)
+    {
+        std::cout << "pick dock:\t" << x << '\n';
+
+        switch (x)
+        {
+        case 0:
+            m_dockWidgets[1]->SetTitleWidget();
+            m_dockWidgets[2]->SetTitleWidget();
+            m_dockWidgets[3]->SetTitleWidget();
+            break;
+        case 1:
+            m_dockWidgets[0]->SetTitleWidget();
+            m_dockWidgets[2]->SetTitleWidget();
+            m_dockWidgets[3]->SetTitleWidget();
+            break;
+        case 2:
+            m_dockWidgets[0]->SetTitleWidget();
+            m_dockWidgets[1]->SetTitleWidget();
+            m_dockWidgets[3]->SetTitleWidget();
+            break;
+        case 3:
+            m_dockWidgets[1]->SetTitleWidget();
+            m_dockWidgets[2]->SetTitleWidget();
+            m_dockWidgets[0]->SetTitleWidget();
+            break;
+        default:
+            break;
+        }
+    }
+
 private:
-    std::array<QDockWidget*, 4> m_dockWidgets;
+    std::array<CustomDockWidget*, 4> m_dockWidgets;
     int m_viewportMode{ 1 };
 };
 
@@ -1671,7 +1663,7 @@ class Widget :
 public:
     explicit Widget(QWidget* parent = nullptr) :
         QWidget(parent),
-        mainWindow(new MyMainWindow())
+        m_viewport(new Viewport())
     {
         auto mode1 = new QAction();
         auto mode2 = new QAction();
@@ -1687,13 +1679,13 @@ public:
         mode5->setIcon(QIcon("resource/posX.svg"));
         mode6->setIcon(QIcon("resource/posX.svg"));
         mode7->setIcon(QIcon("resource/posX.svg"));
-        connect(mode1, &QAction::triggered, [this]() {mainWindow->SetViewport(1); });
-        connect(mode2, &QAction::triggered, [this]() {mainWindow->SetViewport(2); });
-        connect(mode3, &QAction::triggered, [this]() {mainWindow->SetViewport(3); });
-        connect(mode4, &QAction::triggered, [this]() {mainWindow->SetViewport(4); });
-        connect(mode5, &QAction::triggered, [this]() {mainWindow->SetViewport(5); });
-        connect(mode6, &QAction::triggered, [this]() {mainWindow->SetViewport(6); });
-        connect(mode7, &QAction::triggered, [this]() {mainWindow->SetViewport(7); });
+        connect(mode1, &QAction::triggered, [this]() {m_viewport->SetViewport(1); });
+        connect(mode2, &QAction::triggered, [this]() {m_viewport->SetViewport(2); });
+        connect(mode3, &QAction::triggered, [this]() {m_viewport->SetViewport(3); });
+        connect(mode4, &QAction::triggered, [this]() {m_viewport->SetViewport(4); });
+        connect(mode5, &QAction::triggered, [this]() {m_viewport->SetViewport(5); });
+        connect(mode6, &QAction::triggered, [this]() {m_viewport->SetViewport(6); });
+        connect(mode7, &QAction::triggered, [this]() {m_viewport->SetViewport(7); });
 
         // 设置Viewport
         auto viewport = new QToolButton();
@@ -1711,8 +1703,8 @@ public:
         QPushButton* btnRestore = new QPushButton();
         btnPrint->setIcon(QIcon("resource/posX.svg"));
         btnRestore->setIcon(QIcon("resource/posX.svg"));
-        connect(btnPrint, SIGNAL(clicked()), mainWindow, SLOT(PrintDockInfo()));
-        connect(btnRestore, SIGNAL(clicked()), mainWindow, SLOT(DontFloat()));
+        connect(btnPrint, SIGNAL(clicked()), m_viewport, SLOT(PrintDockInfo()));
+        connect(btnRestore, SIGNAL(clicked()), m_viewport, SLOT(DontFloat()));
 
         QHBoxLayout* hBtnLayout = new QHBoxLayout();  // 按钮布局
         hBtnLayout->addWidget(viewport);
@@ -1722,12 +1714,12 @@ public:
 
         QVBoxLayout* vMainLayout = new QVBoxLayout(); // 整个窗口布局
         vMainLayout->addLayout(hBtnLayout);
-        vMainLayout->addWidget(mainWindow);
+        vMainLayout->addWidget(m_viewport);
 
         this->setLayout(vMainLayout);
     }
 private:
-    MyMainWindow* mainWindow{ nullptr };
+    Viewport* m_viewport{ nullptr };
 };
 
 #endif // TEST13
