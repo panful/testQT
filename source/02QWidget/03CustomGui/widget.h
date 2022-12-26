@@ -15,7 +15,7 @@
 14.Qt枚举打印字符串QMetaEnum 自定义枚举使用QMetaEnum
 15.自定义QWidget的标题栏
 16.QTabWidget // https://blog.csdn.net/i2program/article/details/126863980
-17.
+17.自定义部件置灰后事件的响应
 
 */
 
@@ -2057,6 +2057,75 @@ private:
 #endif // TEST16
 
 #ifdef TEST17
+
+#include <QWidget>
+#include <QPushButton>
+#include <QBoxLayout>
+#include <QEvent>
+
+#include <iostream>
+
+class MyPushButton :
+    public QPushButton
+{
+public:
+    MyPushButton(QWidget* parent = nullptr) {}
+    ~MyPushButton() {}
+
+    bool event(QEvent* evt) override
+    {
+        // 自定义的按钮置灰以后，还可以响应事件，但是不能响应clicked事件
+        if (this->isEnabled())
+        {
+            std::cout << "is enabled\n";
+        }
+        else
+        {
+            std::cout << "is not enabled\n";
+        }
+
+        switch (evt->type())
+        {
+        case QEvent::MouseButtonRelease:
+            std::cout << "button release\n";
+            break;
+        default:
+            break;
+        }
+
+        return QPushButton::event(evt);
+    }
+};
+
+class Widget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    Widget(QWidget* parent = nullptr)
+    {
+        QPushButton* btn1 = new QPushButton();
+        btn1->setEnabled(false);
+        connect(btn1, &QPushButton::clicked, []() {std::cout << "clicked button 1\n"; });
+
+        QPushButton* btn2 = new QPushButton();
+        btn2->setEnabled(true);
+        connect(btn2, &QPushButton::clicked, []() {std::cout << "clicked button 2\n"; });
+
+        MyPushButton* btn3 = new MyPushButton();
+        btn3->setEnabled(false);
+        // 置灰后不能响应
+        connect(btn3, &QPushButton::clicked, []() {std::cout << "clicked button 3\n"; });
+
+        QVBoxLayout* layout = new QVBoxLayout();
+        layout->addWidget(btn1);
+        layout->addWidget(btn2);
+        layout->addWidget(btn3);
+
+        this->setLayout(layout);
+    }
+    ~Widget() {}
+};
 
 #endif // TEST17
 
