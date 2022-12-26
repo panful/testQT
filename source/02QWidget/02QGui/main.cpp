@@ -12,11 +12,12 @@
 * 11.QStackedWidget计数
 * 12.QMenuBar QToolButton弹出QAction 并设置槽函数
 * 13.QPixmap
-* 14.事件过滤器 钩子
+* 14.事件过滤器 钩子 eventFilter
 * 15.安装事件过滤器
+* 16.
 */
 
-#define TEST1
+#define TEST16
 
 #ifdef TEST1
 
@@ -595,3 +596,12 @@ int main(int argc, char** argv)
 }
 
 #endif // TEST15
+
+#ifdef TEST16
+
+#include <QApplication>
+
+int main()
+{}
+
+#endif // TEST16

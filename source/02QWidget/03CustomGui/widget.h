@@ -14,10 +14,13 @@
 13.TEST6 打印Qt事件，QDockWidget鼠标事件，焦点事件 focus
 14.Qt枚举打印字符串QMetaEnum 自定义枚举使用QMetaEnum
 15.自定义QWidget的标题栏
+16.QTabWidget // https://blog.csdn.net/i2program/article/details/126863980
+17.
+
 */
 
 
-#define TEST13
+#define TEST17
 
 #ifdef TEST1
 
@@ -95,7 +98,7 @@ class Widget :
 {
     Q_OBJECT //最好继承QMainWindow 类
 public:
-    QDockWidget* pd1, * pd2, * pd3; 
+    QDockWidget* pd1, * pd2, * pd3;
     QMainWindow* pw;
     QPushButton* pb, * pb1, * pb2, * pb3, * pb4, * pb5, * pb6;
 
@@ -103,9 +106,9 @@ public:
     {
         pw = new QMainWindow(this);
 
-        QWidget* pw1 = new QWidget; 
+        QWidget* pw1 = new QWidget;
         QWidget* pw2 = new QWidget;
-        QWidget* pw3 = new QWidget; 
+        QWidget* pw3 = new QWidget;
         QWidget* pw4 = new QWidget;
 
         QOpenGLWidget* pogw = new QOpenGLWidget;
@@ -117,12 +120,12 @@ public:
         menu->addAction("111");
         menu->addAction("222");
 
-        pd1 = new QDockWidget; 
-        pd2 = new QDockWidget; 
+        pd1 = new QDockWidget;
+        pd2 = new QDockWidget;
         pd3 = new QDockWidget;
 
         //布局中心部件
-        pb = new QPushButton("XXX", pw1); 
+        pb = new QPushButton("XXX", pw1);
         pw->setCentralWidget(pw1);
         pw1->setStyleSheet("background-color: rgb(127,127,0);"); //设置中心部件的背景色
         //布局可停靠窗口pd1
@@ -135,27 +138,27 @@ public:
         //qDebug() << pd1->layout()->sizeConstraint();
         //布局可停靠窗口pd2
         pw->addDockWidget(Qt::RightDockWidgetArea, pd2);
-        pb3 = new QPushButton("Float", pw3); 
-        pb4 = new QPushButton("Hide", pw3); 
+        pb3 = new QPushButton("Float", pw3);
+        pb4 = new QPushButton("Hide", pw3);
         pb4->move(77, 0);
         pb5 = new QPushButton("Dock2");
         pw3->setStyleSheet("background-color: rgb(0,127,0);"); //设置pw3 的背景色
         //pd2->setTitleBarWidget(pw3); //把pw3 设置为pd2 的标题栏(设置自定义标题栏)
         pd2->setTitleBarWidget(menuBar);
         //设置可停靠窗口和标题栏部件的最小大小，若设置不合适，会使可停靠窗口无法显示某些部件。
-        pd2->setMinimumSize(155, 144); 
+        pd2->setMinimumSize(155, 144);
         pw3->setMinimumSize(155, 55);
         //pw3->resize(111,111); //此函数设置的大小不起作用。
         //设置pd2 的标题及其内容
-        pd2->setWindowTitle("BBB"); 
+        pd2->setWindowTitle("BBB");
         pd2->setWidget(pogw);
         //pd2->setWidget(pb5);
         //布局可停靠窗口pd3
         pw->addDockWidget(Qt::TopDockWidgetArea, pd3);
-        pb6 = new QPushButton("Dock3"); 
+        pb6 = new QPushButton("Dock3");
         pd3->setWidget(pb6);
         //pd3->setWidget(pogw);
-        pd3->setTitleBarWidget(pw4); 
+        pd3->setTitleBarWidget(pw4);
         /*因为pw4 的最小大小默认为0，因此设置pw4 为pd3 的标
         题栏，会使pd3 的标题栏不可见(因为大小为0)。*/
 
@@ -164,7 +167,7 @@ public:
         QObject::connect(pb3, &QPushButton::clicked, this, &Widget::f3);//点击pb3 使pd2 处于悬浮状态
         QObject::connect(pb4, &QPushButton::clicked, this, &Widget::f4);//点击pb3 使pd2 停靠在主窗口
 
-        pw->resize(333, 222); 
+        pw->resize(333, 222);
         pw->show();
     }
 public slots:
@@ -242,15 +245,17 @@ public:
         pw->setCentralWidget(this); //设置主窗口的中心部件
         //初始化工具栏
         pt1 = new QToolBar("TTT", pw); //标题TTT 不会显示为工具栏中的工具按钮文本
-        pt2 = new QToolBar("TTT", pw); pt3 = new QToolBar("TTT", pw); pt4 = new QToolBar("TTT", pw);
+        pt2 = new QToolBar("TTT", pw);
+        pt3 = new QToolBar("TTT", pw);
+        pt4 = new QToolBar("TTT", pw);
         //把工具栏添加到主窗口pw 中
         pw->addToolBar(pt1); pw->addToolBar(pt2); pw->addToolBar(pt3);
         pw->addToolBar(Qt::RightToolBarArea, pt4); //把工具栏pt4 添加到右侧的工具栏区域
         //向各工具栏中添加动作
-        pt1->addAction(QIcon("F:/1i.png"), "111"); pt1->addAction(QIcon("F:/1i.png"), "112");
-        pt2->addAction(QIcon("F:/1i.png"), "221"); pt2->addAction(QIcon("F:/1i.png"), "222");
-        pt3->addAction(QIcon("F:/1i.png"), "331"); pt3->addAction(QIcon("F:/1i.png"), "332");
-        pt4->addAction(QIcon("F:/1i.png"), "441"); pt4->addAction(QIcon("F:/1i.png"), "442");
+        pt1->addAction(QIcon("resource/expand.svg"), "111"); pt1->addAction(QIcon("resource/expand.svg"), "112");
+        pt2->addAction(QIcon("resource/expand.svg"), "221"); pt2->addAction(QIcon("resource/expand.svg"), "222");
+        pt3->addAction(QIcon("resource/expand.svg"), "331"); pt3->addAction(QIcon("resource/expand.svg"), "332");
+        pt4->addAction(QIcon("resource/expand.svg"), "441"); pt4->addAction(QIcon("resource/expand.svg"), "442");
         //设置各工具栏的属性
         pt2->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);//把文字显示在图标的侧面
         pt3->setToolButtonStyle(Qt::ToolButtonTextOnly); //仅显示文字
@@ -291,7 +296,7 @@ class CustomDockWidget :
 {
     Q_OBJECT
 public:
-    explicit CustomDockWidget(QWidget* parent = nullptr):
+    explicit CustomDockWidget(QWidget* parent = nullptr) :
         QDockWidget(parent)
     {
         // 等价于事件 QEvent::ZOrderChange
@@ -365,7 +370,7 @@ protected:
     bool event(QEvent* event) override
     {
         // 构造函数中修改了标题栏之后，不要在此处再设置WindowFlag
-        
+
         //if (this->windowFlags() & (Qt::WindowCloseButtonHint
         //    | Qt::WindowMaximizeButtonHint
         //    | Qt::WindowMinimizeButtonHint))
@@ -483,7 +488,7 @@ public slots:
         auto dockHeight = static_cast<int>(this->geometry().height() * 0.5);
 
         // 将所有悬浮的窗口复位
-        std::for_each(m_dockWidgets.begin(), m_dockWidgets.end(), [](QDockWidget* dock) 
+        std::for_each(m_dockWidgets.begin(), m_dockWidgets.end(), [](QDockWidget* dock)
             {
                 if (dock->isFloating())
                 {
@@ -494,101 +499,101 @@ public slots:
         switch (i)
         {
         case 1:
-            {
-                m_dockWidgets[1]->hide();
-                m_dockWidgets[2]->hide();
-                m_dockWidgets[3]->hide();
-            }
-            break;
+        {
+            m_dockWidgets[1]->hide();
+            m_dockWidgets[2]->hide();
+            m_dockWidgets[3]->hide();
+        }
+        break;
         case 2:
-            {   // 左1右1
-                m_dockWidgets[1]->show();
-                m_dockWidgets[2]->hide();
-                m_dockWidgets[3]->hide();
+        {   // 左1右1
+            m_dockWidgets[1]->show();
+            m_dockWidgets[2]->hide();
+            m_dockWidgets[3]->hide();
 
-                this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[1], Qt::Horizontal);
-                this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[1] }, { dockWidth,dockWidth }, Qt::Horizontal);
-            }
-            break;
+            this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[1], Qt::Horizontal);
+            this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[1] }, { dockWidth,dockWidth }, Qt::Horizontal);
+        }
+        break;
         case 3:
-            {   // 上1下1
-                m_dockWidgets[1]->show();
-                m_dockWidgets[2]->hide();
-                m_dockWidgets[3]->hide();
+        {   // 上1下1
+            m_dockWidgets[1]->show();
+            m_dockWidgets[2]->hide();
+            m_dockWidgets[3]->hide();
 
-                this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[1], Qt::Vertical);
-                this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[1] }, { dockHeight,dockHeight }, Qt::Vertical);
-            }
-            break;
+            this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[1], Qt::Vertical);
+            this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[1] }, { dockHeight,dockHeight }, Qt::Vertical);
+        }
+        break;
         case 4:
-            {   // 上1下2
-                m_dockWidgets[1]->show();
-                m_dockWidgets[2]->show();
-                m_dockWidgets[3]->hide();
+        {   // 上1下2
+            m_dockWidgets[1]->show();
+            m_dockWidgets[2]->show();
+            m_dockWidgets[3]->hide();
 
-                this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[1], Qt::Vertical);
-                this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[2], Qt::Vertical);
-                this->splitDockWidget(m_dockWidgets[1], m_dockWidgets[2], Qt::Horizontal);
-                this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[1] }, { dockHeight,dockHeight }, Qt::Vertical);
-                this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[2] }, { dockHeight,dockHeight }, Qt::Vertical);
-                this->resizeDocks({ m_dockWidgets[1],m_dockWidgets[2] }, { dockWidth,dockWidth }, Qt::Horizontal);                
-            }
-            break;
+            this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[1], Qt::Vertical);
+            this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[2], Qt::Vertical);
+            this->splitDockWidget(m_dockWidgets[1], m_dockWidgets[2], Qt::Horizontal);
+            this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[1] }, { dockHeight,dockHeight }, Qt::Vertical);
+            this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[2] }, { dockHeight,dockHeight }, Qt::Vertical);
+            this->resizeDocks({ m_dockWidgets[1],m_dockWidgets[2] }, { dockWidth,dockWidth }, Qt::Horizontal);
+        }
+        break;
         case 5:
-            {   // 上2下1
-                m_dockWidgets[1]->show();
-                m_dockWidgets[2]->show();
-                m_dockWidgets[3]->hide();
+        {   // 上2下1
+            m_dockWidgets[1]->show();
+            m_dockWidgets[2]->show();
+            m_dockWidgets[3]->hide();
 
-                this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[2], Qt::Vertical);
-                this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[1], Qt::Horizontal);
-                this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[2] }, { dockHeight,dockHeight }, Qt::Vertical);
-                this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[1] }, { dockWidth,dockWidth }, Qt::Horizontal);
-            }
-            break;
+            this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[2], Qt::Vertical);
+            this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[1], Qt::Horizontal);
+            this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[2] }, { dockHeight,dockHeight }, Qt::Vertical);
+            this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[1] }, { dockWidth,dockWidth }, Qt::Horizontal);
+        }
+        break;
         case 6:
-            {   // 左2右1
-                m_dockWidgets[1]->show();
-                m_dockWidgets[2]->show();
-                m_dockWidgets[3]->hide();
+        {   // 左2右1
+            m_dockWidgets[1]->show();
+            m_dockWidgets[2]->show();
+            m_dockWidgets[3]->hide();
 
-                this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[1], Qt::Horizontal);
-                this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[2], Qt::Vertical);
-                this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[1] }, { dockWidth,dockWidth }, Qt::Horizontal);
-                this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[2] }, { dockHeight,dockHeight }, Qt::Vertical);
-            }
-            break;
+            this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[1], Qt::Horizontal);
+            this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[2], Qt::Vertical);
+            this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[1] }, { dockWidth,dockWidth }, Qt::Horizontal);
+            this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[2] }, { dockHeight,dockHeight }, Qt::Vertical);
+        }
+        break;
         case 7:
-            {   // 4
-                m_dockWidgets[1]->show();
-                m_dockWidgets[2]->show();
-                m_dockWidgets[3]->show();
+        {   // 4
+            m_dockWidgets[1]->show();
+            m_dockWidgets[2]->show();
+            m_dockWidgets[3]->show();
 
-                this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[1], Qt::Horizontal);
-                this->splitDockWidget(m_dockWidgets[2], m_dockWidgets[3], Qt::Horizontal);
-                this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[2], Qt::Vertical);
-                this->splitDockWidget(m_dockWidgets[1], m_dockWidgets[3], Qt::Vertical);
+            this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[1], Qt::Horizontal);
+            this->splitDockWidget(m_dockWidgets[2], m_dockWidgets[3], Qt::Horizontal);
+            this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[2], Qt::Vertical);
+            this->splitDockWidget(m_dockWidgets[1], m_dockWidgets[3], Qt::Vertical);
 
-                this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[1] }, { dockWidth,dockWidth }, Qt::Horizontal);
-                this->resizeDocks({ m_dockWidgets[2],m_dockWidgets[3] }, { dockWidth,dockWidth }, Qt::Horizontal);
-                this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[2] }, { dockHeight,dockHeight }, Qt::Vertical);
-                this->resizeDocks({ m_dockWidgets[1],m_dockWidgets[3] }, { dockHeight,dockHeight }, Qt::Vertical);
-            }
-            break;
+            this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[1] }, { dockWidth,dockWidth }, Qt::Horizontal);
+            this->resizeDocks({ m_dockWidgets[2],m_dockWidgets[3] }, { dockWidth,dockWidth }, Qt::Horizontal);
+            this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[2] }, { dockHeight,dockHeight }, Qt::Vertical);
+            this->resizeDocks({ m_dockWidgets[1],m_dockWidgets[3] }, { dockHeight,dockHeight }, Qt::Vertical);
+        }
+        break;
         case 8:
-            {   // 左1右2
-                m_dockWidgets[1]->show();
-                m_dockWidgets[2]->show();
-                m_dockWidgets[3]->hide();
+        {   // 左1右2
+            m_dockWidgets[1]->show();
+            m_dockWidgets[2]->show();
+            m_dockWidgets[3]->hide();
 
-                this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[1], Qt::Horizontal);
-                this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[2], Qt::Vertical);
-                this->splitDockWidget(m_dockWidgets[1], m_dockWidgets[2], Qt::Vertical);
-                this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[1] }, { dockWidth,dockWidth }, Qt::Horizontal);
-                this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[2] }, { dockHeight,dockHeight }, Qt::Vertical);
-                this->resizeDocks({ m_dockWidgets[1],m_dockWidgets[2] }, { dockHeight,dockHeight }, Qt::Vertical);
-            }
-            break;
+            this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[1], Qt::Horizontal);
+            this->splitDockWidget(m_dockWidgets[0], m_dockWidgets[2], Qt::Vertical);
+            this->splitDockWidget(m_dockWidgets[1], m_dockWidgets[2], Qt::Vertical);
+            this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[1] }, { dockWidth,dockWidth }, Qt::Horizontal);
+            this->resizeDocks({ m_dockWidgets[0],m_dockWidgets[2] }, { dockHeight,dockHeight }, Qt::Vertical);
+            this->resizeDocks({ m_dockWidgets[1],m_dockWidgets[2] }, { dockHeight,dockHeight }, Qt::Vertical);
+        }
+        break;
         default:
             break;
         }
@@ -705,7 +710,7 @@ class Widget :
 {
     Q_OBJECT
 public:
-    explicit Widget(QWidget* parent = nullptr):
+    explicit Widget(QWidget* parent = nullptr) :
         QWidget(parent)
     {
         QHBoxLayout* layout = new QHBoxLayout();
@@ -810,7 +815,7 @@ class Widget : public QWidget
     Q_OBJECT
 
 public:
-    Widget(QWidget* parent = nullptr):
+    Widget(QWidget* parent = nullptr) :
         QWidget(parent)
     {
         btn1 = new QPushButton("Qt btn", this);
@@ -856,13 +861,13 @@ private:
 #include <QPushButton>
 #include <QBoxLayout>
 
-class CustomButton : 
+class CustomButton :
     public QPushButton
 {
     Q_OBJECT
 
 public:
-    CustomButton(std::string name = std::string(), QWidget* parent = nullptr):
+    CustomButton(std::string name = std::string(), QWidget* parent = nullptr) :
         QPushButton(parent)
     {
         std::cout << " === Button construct\n";
@@ -875,7 +880,7 @@ public:
     }
 };
 
-class CustomLayout : 
+class CustomLayout :
     public QVBoxLayout
 {
     Q_OBJECT
@@ -896,7 +901,7 @@ public:
 class MiddleWare
 {
 public:
-    MiddleWare():
+    MiddleWare() :
         m_widget(nullptr),
         m_mainLayout(nullptr)
     {
@@ -947,7 +952,7 @@ class Widget : public QWidget
 public:
     Widget(QWidget* parent = nullptr) :
         QWidget(parent),
-        m_btnRelease(new QPushButton("Release",this)),
+        m_btnRelease(new QPushButton("Release", this)),
         m_middleWare(std::make_unique<MiddleWare>())
     {
         QVBoxLayout* layout = new QVBoxLayout();
@@ -987,13 +992,13 @@ private:
 #include <QBoxLayout>
 #include <QSpacerItem>
 
-class CustomButton : 
+class CustomButton :
     public QPushButton
 {
     Q_OBJECT
 
 public:
-    CustomButton(std::string name = std::string(), QWidget* parent = nullptr):
+    CustomButton(std::string name = std::string(), QWidget* parent = nullptr) :
         QPushButton(parent)
     {
         std::cout << " === Button construct\n";
@@ -1006,7 +1011,7 @@ public:
     }
 };
 
-class CustomVLayout : 
+class CustomVLayout :
     public QVBoxLayout
 {
     Q_OBJECT
@@ -1077,13 +1082,13 @@ public:
 };
 
 
-class MiddleWare:
+class MiddleWare :
     public QObject
 {
     Q_OBJECT
 
 public:
-    MiddleWare():
+    MiddleWare() :
         m_widget(nullptr),
         m_mainLayout(nullptr)
     {
@@ -1171,7 +1176,7 @@ class Widget : public QWidget
 public:
     Widget(QWidget* parent = nullptr) :
         QWidget(parent),
-        m_btnRelease(new QPushButton("Release",this)),
+        m_btnRelease(new QPushButton("Release", this)),
         m_middleWare(std::make_unique<MiddleWare>())
     {
         QVBoxLayout* layout = new QVBoxLayout();
@@ -1368,7 +1373,7 @@ public:
     }
 
 signals:
-//Q_SIGNALS:
+    //Q_SIGNALS:
     void sigMyFocus();
 
 private slots:
@@ -1469,11 +1474,22 @@ public:
         this->addDockWidget(Qt::BottomDockWidgetArea, m_dockWidgets[3]);
 
         // 禁止标签页方式停靠
-        this->setDockOptions(this->dockOptions() & ~DockOption::AllowTabbedDocks);
+        //this->setDockOptions(this->dockOptions() & ~DockOption::AllowTabbedDocks);
 
         //m_dockWidgets[1]->hide();
         //m_dockWidgets[2]->hide();
         //m_dockWidgets[3]->hide();
+    }
+
+    bool event(QEvent* event) override
+    {
+        // 屏蔽右键qdockwidget标题栏时，弹出菜单
+        if (event->type() == QEvent::ContextMenu)
+        {
+            return false;
+        }
+
+        return QMainWindow::event(event);
     }
 public slots:
     void SetViewport(int i)
@@ -1799,11 +1815,11 @@ class TitleBar : public QWidget
     Q_OBJECT
 
 public:
-    TitleBar(QWidget* parent = nullptr):
+    TitleBar(QWidget* parent = nullptr) :
         QWidget(parent)
     {
         this->setStyleSheet("background-color: rgb(0,127,0);");
-        
+
         // 标题栏（其实就是窗口最上边）添加自定义部件
         QMenuBar* menuBar = new QMenuBar(this);
         QMenu* menu = menuBar->addMenu("AAA");
@@ -1826,7 +1842,7 @@ public:
 
         m_btnMax->setFixedSize(QSize(cBtnWidth, cBtnHeight));
         m_btnMin->setFixedSize(QSize(cBtnWidth, cBtnHeight));
-        m_btnClose ->setFixedSize(QSize(cBtnWidth, cBtnHeight));
+        m_btnClose->setFixedSize(QSize(cBtnWidth, cBtnHeight));
         m_btnRestore->setFixedSize(QSize(cBtnWidth, cBtnHeight));
 
 
@@ -1886,3 +1902,163 @@ public:
 };
 
 #endif // TEST15
+
+#ifdef TEST16
+
+#include <QtWidgets>
+#include <QtOpenGLWidgets>
+
+#include <iostream>
+
+class tabBarEventFilter :
+    public QObject
+{
+public:
+    bool eventFilter(QObject* w, QEvent* e)
+    {
+        if (e->type() == QEvent::MouseButtonPress)
+        {
+            std::cout << "tabBar press\n";
+            //return true; // 不再进行处理
+        }
+        return false;
+    }
+};
+
+class MyTabWidget :public QTabWidget
+{
+    Q_OBJECT
+public:
+    MyTabWidget(QWidget* p = nullptr) :
+        QTabWidget(p)
+    {
+        this->setMovable(true);
+        this->setAcceptDrops(true);
+
+        // 给TabBar安装一个事件钩子
+        QObject* eventFilter = new tabBarEventFilter();
+        this->tabBar()->installEventFilter(eventFilter);
+
+    }
+
+public slots:
+    void RemoveFirstTab()
+    {
+
+        std::cout << "window\t" << this->count() << '\t' << this->widget(0)->objectName().toStdString() << '\n';
+
+        //QWidget* www = new QWidget();
+        //www->resize(100, 100);
+        ////memcpy(www, this->widget(0), sizeof(QWidget));
+        //www->show();
+        //this->widget(0)->hide();
+
+        //QWidget* w = new QWidget();
+        //QGridLayout* layout = new QGridLayout();
+        //layout->addWidget(this->widget(0));
+        //w->setLayout(layout);
+        //w->resize(300, 200);
+        //w->show();
+
+        //移除索引为零的选项卡
+        this->removeTab(0);
+    }
+    void AddTab()
+    {
+        static int index = 0;
+        this->addTab(new QOpenGLWidget(), "New_" + QString::number(index++));
+    }
+};
+
+class Widget :
+    public QWidget
+{
+    Q_OBJECT
+public:
+    Widget() :
+        tabWidget(new MyTabWidget()),
+        stackedWidget(new QStackedWidget())
+    {
+        // 用来放置toolbar
+        QMainWindow* toolMainWindow = new QMainWindow();
+        toolMainWindow->setCentralWidget(stackedWidget);
+
+        QGridLayout* gridLayout = new QGridLayout();
+        this->setLayout(gridLayout);
+        gridLayout->addWidget(toolMainWindow);
+
+        std::cout << this->contentsMargins().left() << '\t' << this->contentsMargins().top() << '\t'
+            << this->contentsMargins().right() << '\t' << this->contentsMargins().bottom() << '\n';
+        int a = 0, b = 0, c = 0, d = 0;
+        //gridLayout->getContentsMargins(&a, &b, &c, &d);
+        std::cout << a << '\t' << b << '\t' << c << '\t' << d << '\n';
+
+        // 用来切换截图和渲染窗口
+        stackedWidget->addWidget(tabWidget);
+        stackedWidget->addWidget(new QWidget());
+        stackedWidget->setCurrentWidget(tabWidget);
+
+        QToolBar* toolBar1 = new QToolBar("Tool 1", toolMainWindow);
+        QToolBar* toolBar2 = new QToolBar("Tool 2", toolMainWindow);
+
+        QAction* removeTabAct = new QAction("remove");
+        QAction* addTabAct = new QAction("add");
+        QAction* testAct1 = new QAction("test1");
+        QAction* testAct2 = new QAction("test2");
+
+        connect(removeTabAct, &QAction::triggered, [this]() {this->tabWidget->RemoveFirstTab(); });
+        connect(addTabAct, &QAction::triggered, [this]() {this->tabWidget->AddTab(); });
+        connect(testAct1, &QAction::triggered, [this]() { this->stackedWidget->setCurrentIndex(this->stackedWidget->currentIndex() == 0 ? 1 : 0); });
+        connect(testAct2, &QAction::triggered, [this]() { std::cout << "count:" << this->tabWidget->count() << "\tindex:" << this->tabWidget->currentIndex() << '\n'; });
+
+        toolBar1->addAction(removeTabAct);
+        toolBar1->addAction(addTabAct);
+        toolBar1->addAction(testAct1);
+        toolBar1->addAction(testAct2);
+
+        toolBar1->addAction(QIcon("resource/expand.svg"), "111");
+        toolBar2->addAction(QIcon("resource/undo.svg"), "222");
+        // 第二个参数就是tooltip
+        auto act1 = toolBar1->addAction(QIcon("resource/undo.svg"), "test", []() {std::cout << "test\n"; });
+        std::cout << "tool tip\t" << act1->toolTip().toStdString() << '\n';
+
+        toolMainWindow->addToolBar(toolBar1);
+        toolMainWindow->addToolBar(toolBar2);
+
+        // 用来放置dockwidget
+        QMainWindow* tabMainWindow1 = new QMainWindow();
+        tabMainWindow1->setObjectName("123456");
+
+        // 每个tab可以添加QDockWidget
+        QDockWidget* dock1_1 = new QDockWidget();
+        dock1_1->setWidget(new QOpenGLWidget());
+        QDockWidget* dock1_2 = new QDockWidget();
+        dock1_2->setWidget(new QOpenGLWidget());
+
+        tabMainWindow1->addDockWidget(Qt::TopDockWidgetArea, dock1_1);
+        tabMainWindow1->addDockWidget(Qt::BottomDockWidgetArea, dock1_2);
+
+        // 添加多个tabwidget
+        tabWidget->addTab(tabMainWindow1, "AAA");
+        tabWidget->addTab(new QOpenGLWidget(), "BBB");
+        tabWidget->addTab(new QOpenGLWidget(), "CCC");
+
+        // 需要将QTabWidget放在布局中，或者设置大小
+        // 或者在QMainWindow->setCentralWidget(tab)不然不会显示
+        //tabWidget->setMinimumSize(600, 400);
+    }
+
+private:
+    MyTabWidget* tabWidget;
+    QStackedWidget* stackedWidget;
+
+};
+
+#endif // TEST16
+
+#ifdef TEST17
+
+#endif // TEST17
+
+
+
