@@ -1,5 +1,5 @@
-
-#include "qdatamgr.h"
+﻿
+#include "QDataMgr.h"
 #include <QDebug>
 QDataMgr::QDataMgr(QObject* parent) : QObject(parent)
 {

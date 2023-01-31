@@ -12,7 +12,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include "qdatamgr.h"
+#include "QDataMgr.h"
 
 int main(int argc, char* argv[])
 {
@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
     QQmlApplicationEngine engine;
     QDataMgr data_mgr;
     engine.rootContext()->setContextProperty("DATAMGR", &data_mgr);
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    engine.load(QUrl(QStringLiteral("03_02.qml")));
 
     if (engine.rootObjects().isEmpty())
         return -1;

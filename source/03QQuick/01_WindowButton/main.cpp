@@ -1,6 +1,10 @@
 ﻿#include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
+
+// 报错：module "QtQuick" is not installed
+// 添加环境变量QML2_IMPORT_PATH 值Qt/6.2.2/msvc2019_64/qml
+
 int main(int argc, char* argv[])
 {
     // warning C4996: 'Qt::AA_EnableHighDpiScaling': High-DPI scaling is always enabled. This attribute no longer has any effect.
@@ -10,11 +14,8 @@ int main(int argc, char* argv[])
 
     QGuiApplication app(argc, argv);
 
-    //把item类型注册到qml中<Cpp类型>(qml模块名,主版本,次版本,qml类型)
-    //qmlRegisterType<ViewerItem>("LearnOpenGL", 1, 0, "ViewerItem"); //模块名和qml中的import对应
-
     QQmlApplicationEngine engine;
-    const QUrl url(QStringLiteral("QQuick.qml"));
+    const QUrl url(QStringLiteral("03_01.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
         &app, [url](QObject* obj, const QUrl& objUrl) {
             if (!obj && url == objUrl)

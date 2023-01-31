@@ -1,15 +1,13 @@
-import QtQuick 2.0
+ï»¿import QtQuick 2.0
 import QtQuick.Window 2.0
-
-//import QtQuick.Controls 1.1
 import QtQuick.Controls 2.15
 
 Window{
     visible: true
     width: 450
     height: 450
-    title: qsTr("Test Window") //´°¿Ú±êÌâ
-    color: "white"  //´°¿Ú±³¾°É«£¬Èç¹ûÆÌÂúÕû¸ö´°¿Ú£¬¾Í²»»áÏÔÊ¾³öÀ´
+    title: qsTr("Test Window")  //çª—å£æ ‡é¢˜
+    color: "green"              //çª—å£èƒŒæ™¯è‰²
 
     Button {
         text: "Quit";
