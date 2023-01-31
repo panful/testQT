@@ -14,7 +14,7 @@
 * 13.QPixmap
 * 14.事件过滤器 钩子 eventFilter
 * 15.安装事件过滤器
-* 16.
+* 16.QPainter绘制文字并保存为图片
 */
 
 #define TEST16
@@ -600,8 +600,61 @@ int main(int argc, char** argv)
 #ifdef TEST16
 
 #include <QApplication>
+#include <QWidget>
+#include <QPainter>
+#include <QString>
+#include <QDebug>
 
-int main()
-{}
+int main(int argc, char** argv)
+{
+    QApplication app(argc, argv);
+
+    QImage img(QSize(800, 400), QImage::Format_ARGB32);  //第二个参数为图片模式，rgb，rgba等等
+    img.fill(QColor(0, 0, 0, 0));   //填充为透明 Qt::transparent
+
+    QPainter painter;
+
+    //字体,QGuiApplication实例必须存在才能使用QFont
+    //QFont font("宋体", 15, QFont::Bold, true);
+
+    //画笔
+    QPen pen;
+    pen.setColor(Qt::red); //设置画笔颜色
+
+    //画刷
+    QBrush brush;
+    brush.setColor(Qt::blue);
+
+    painter.begin(&img);  //begin会重置painter，画笔画刷等等需要在begin之后设置才能生效
+
+    painter.setPen(pen);
+    //painter.setFont(font); //QPainter有默认字体
+    painter.drawRect(QRect(0, 0, 799, 399));  //画一个矩形
+
+    painter.drawText(QRect(0, 0, 10, 20), QString::fromLocal8Bit("1"));  //必须有字体，无论是使用默认的还是自定义的，因此必须实例化QApplication
+    painter.drawText(QRect(100, 0, 10, 20), QString::fromLocal8Bit("2"));
+    painter.drawText(QRect(200, 0, 10, 20), QString::fromLocal8Bit("3"));
+    painter.drawText(QRect(300, 0, 10, 20), QString::fromLocal8Bit("4"));
+    painter.drawText(QRect(400, 0, 10, 20), QString::fromLocal8Bit("5"));
+    painter.drawText(QRect(500, 0, 10, 20), QString::fromLocal8Bit("6"));
+    painter.drawText(QRect(600, 0, 10, 20), QString::fromLocal8Bit("7"));
+    painter.drawText(QRect(700, 0, 10, 20), QString::fromLocal8Bit("8"));
+    painter.drawText(QRect(800, 0, 10, 20), QString::fromLocal8Bit("9"));  //出了边界绘制不出来
+
+    painter.end();
+    if (img.save("02_02_16.png"))
+    {
+        qDebug() << "save image success";
+    }
+    else
+    {
+        qDebug() << "save image failed";
+
+    }
+
+    auto ret = img.bits();
+
+    return app.exec();
+}
 
 #endif // TEST16
