@@ -10,9 +10,10 @@
 * 8.序列化与反序列化
 * 9.正则表达式
 * 10 Qt调用js脚本正则表达式匹配中文
+* 11 QMap QList QVector QSet
 */
 
-#define TEST10
+#define TEST11
 
 #ifdef TEST0
 
@@ -402,3 +403,48 @@ int main(int argc, char* argv[])
     return a.exec();
 }
 #endif // TEST10
+
+#ifdef TEST11
+
+#include <QMap>
+#include <QSet>
+#include <QList>
+#include <QVector>
+#include <QDebug>
+#include <QString>
+
+int main()
+{
+    // QMap
+    {
+        QMap<int, QString> theMap{ {1,"a"},{2,"b"} };
+        qDebug() << theMap.size() << '\t' << theMap;
+        qDebug() << theMap[1];
+        theMap.insert(1, "c"); // 会覆盖key值相同的元素
+        qDebug() << theMap.size() << '\t' << theMap;
+        theMap.insert(3, "d");
+        qDebug() << theMap.size() << '\t' << theMap;
+    }
+
+    qDebug() << "--------------------------------------------";
+
+    // QVector
+    {
+        // Qt有如下定义
+        // template<typename T> using QVector = QList<T>;
+
+        QVector<int> theVector{ 1,2,3,4,5 };
+        qDebug() << theVector.size() << '\t' << theVector;
+    }
+
+    qDebug() << "--------------------------------------------";
+
+    // QList
+    {
+        QList<int> theList{ 1,2,3,4,5 };
+        qDebug() << theList.size() << '\t' << theList;
+    }
+    return 0;
+}
+
+#endif // TEST11
