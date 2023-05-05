@@ -1,19 +1,20 @@
 ﻿/*
-* 0.自定义信号和槽
-* 1.QJson
-* 2.QJson QVariant QString 互相转换
-* 3.QPointer
-* 4.槽函数使用lambda
-* 5.QVariant
-* 6.QClipboard剪贴板
-* 7.QVarLengthArray
-* 8.序列化与反序列化
-* 9.正则表达式
-* 10 Qt调用js脚本正则表达式匹配中文
-* 11 QMap QList QVector QSet
-*/
+ * 00. 自定义信号和槽
+ * 01. QJson
+ * 02. QJson QVariant QString 互相转换
+ * 03. QPointer
+ * 04. 槽函数使用lambda
+ * 05. QVariant
+ * 06. QClipboard剪贴板
+ * 07. QVarLengthArray
+ * 08. 序列化与反序列化
+ * 09. 正则表达式
+ * 10. Qt调用js脚本正则表达式匹配中文
+ * 11. QMap QList QVector QSet
+ * 12. QResource
+ */
 
-#define TEST11
+#define TEST12
 
 #ifdef TEST0
 
@@ -33,12 +34,12 @@ int main()
 
 #ifdef TEST1
 
-#include <QVariantMap>
+#include <QDebug>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonArray>
 #include <QVarLengthArray>
-#include <QDebug>
+#include <QVariantMap>
 
 int main()
 {
@@ -55,20 +56,19 @@ int main()
     m["4"] = 4;
     m["3"] = 6;
 
-    auto json = QJsonDocument::QJsonDocument(QVariant(m).toJsonObject()).toJson(); //QVariantMap转为json
-    auto str = QString(json); //json转为QString字符串
+    auto json = QJsonDocument::QJsonDocument(QVariant(m).toJsonObject()).toJson(); // QVariantMap转为json
+    auto str  = QString(json);                                                     // json转为QString字符串
 
+    // QJsonArray ja;
+    // QJsonDocument jd;
+    // QJsonObject jo;
+    // QJsonValue jv;
+    // QJsonPrivate //命名空间
 
-    //QJsonArray ja;
-    //QJsonDocument jd;
-    //QJsonObject jo;
-    //QJsonValue jv;
-    //QJsonPrivate //命名空间
-
-    //QByteArray ba;
-    //QByteArrayList bal;
-    //QByteArrayData bad;
-    //QVarLengthArray<int> vla;
+    // QByteArray ba;
+    // QByteArrayList bal;
+    // QByteArrayData bad;
+    // QVarLengthArray<int> vla;
 
     QVariantList people;
 
@@ -84,29 +84,23 @@ int main()
 
     auto json2 = QJsonDocument::QJsonDocument(QVariant(people).toJsonObject()).toJson();
 
-    //QJson::Serializer serializer;
-    //QByteArray json = serializer.serialize(people);
+    // QJson::Serializer serializer;
+    // QByteArray json = serializer.serialize(people);
 
     qDebug() << json;
 
-
-
-
     //--
-    QJsonObject object
-    {
-        {"error",QString::fromStdString("std string")}
-    };
+    QJsonObject object { { "error", QString::fromStdString("std string") } };
 
     auto json3 = QJsonDocument::fromJson((object));
 
-    //QJsonDocument jsonDoc1 = QJsonDocument::fromJson(QByteArray());
-    //QJsonDocument jsonDoc2 = QJsonDocument::fromVariant(QVariant());
-    //QJsonDocument jsonDoc3 = QJsonDocument::fromBinaryData(QByteArray());
+    // QJsonDocument jsonDoc1 = QJsonDocument::fromJson(QByteArray());
+    // QJsonDocument jsonDoc2 = QJsonDocument::fromVariant(QVariant());
+    // QJsonDocument jsonDoc3 = QJsonDocument::fromBinaryData(QByteArray());
 
-    //QString str1 = object["str"].toString();
+    // QString str1 = object["str"].toString();
 
-    //QVariantMap vmap1 = object.toVariantMap();
+    // QVariantMap vmap1 = object.toVariantMap();
 
     //--
 
@@ -117,12 +111,12 @@ int main()
 
 #ifdef TEST2
 
-#include <QVariantMap>
+#include <QDebug>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonArray>
 #include <QString>
-#include <QDebug>
+#include <QVariantMap>
 
 int main()
 {
@@ -130,11 +124,11 @@ int main()
     QString str1 = "{\"key1\":{\"key2\":8888}}";
     QByteArray jsonData1;
     QJsonDocument jsonDoc1 = QJsonDocument::fromJson(jsonData1.append("{\"key1\":{\"key2\":8888}}"));
-    //QJsonDocument jsonDoc1 = QJsonDocument::fromJson(jsonData1.append(str1)); //Qt6不支持
+    // QJsonDocument jsonDoc1 = QJsonDocument::fromJson(jsonData1.append(str1)); //Qt6不支持
     // QJsonDocument 转 QJsonObject
     QJsonObject obj1 = jsonDoc1.object();
     // 获取QJsonObject的value
-    QString key = obj1.keys().at(0);
+    QString key      = obj1.keys().at(0);
     QJsonValue value = obj1.value(key);
     // QJsonValue 转 QJsonObject
     QJsonObject ret1 = value.toObject();
@@ -148,7 +142,7 @@ int main()
     QJsonDocument jsonDoc3 = QJsonDocument::QJsonDocument(QVariant(var1).toJsonObject());
     // QVariantMap 转 QString
     QByteArray byte1 = QJsonDocument::QJsonDocument(QVariant(var1).toJsonObject()).toJson();
-    QString str2 = byte1;
+    QString str2     = byte1;
     // QVariantMap 转 QJsonObject
     QJsonObject obj2 = QVariant(var1).toJsonObject();
     QJsonObject obj3 = QJsonObject(QJsonDocument::fromJson(QJsonDocument::fromVariant(QVariant(var1)).toJson()).object());
@@ -158,7 +152,6 @@ int main()
     qDebug() << "test\n";
     return 0;
 }
-
 
 #endif // TEST2
 
@@ -170,8 +163,15 @@ int main()
 class Test
 {
 public:
-    Test() { std::cout << "construct\n"; }
-    ~Test() { std::cout << "deconstruct\n"; }
+    Test()
+    {
+        std::cout << "construct\n";
+    }
+
+    ~Test()
+    {
+        std::cout << "deconstruct\n";
+    }
 };
 
 int main()
@@ -182,59 +182,59 @@ int main()
     }
 }
 
-
-
 #endif // TEST3
 
 #ifdef TEST4
 
-
-//connect(send, SIGNAL(triggered()), receive, SLOT(func()));
-//connect(send, &QAction::triggered, receive, [this]() {std::cout << "sss\n"; });  // receive如果是this，可写可不写
-//connect(send, SIGNAL(triggered()), receive, [this]() {std::cout << "sss\n"; });  // 不能这样使用
-
+// connect(send, SIGNAL(triggered()), receive, SLOT(func()));
+// connect(send, &QAction::triggered, receive, [this]() {std::cout << "sss\n"; });  // receive如果是this，可写可不写
+// connect(send, SIGNAL(triggered()), receive, [this]() {std::cout << "sss\n"; });  // 不能这样使用
 
 int main()
-{}
+{
+}
 
 #endif // TEST4
 
 #ifdef TEST5
 
-#include <iostream>
-#include <QVariant>
 #include <QDebug>
+#include <QVariant>
+#include <iostream>
 #include <vector>
 Q_DECLARE_METATYPE(std::string)
 Q_DECLARE_METATYPE(int*)
+
 int main()
 {
     std::string str = "test";
-    QVariant v1 = 12;
-    QVariant v2; v2.setValue(str); //非Qt(C++)内置类型必须用setValue赋值
-    //QVariant v2 = "test";  //此时的v2只能转为QString，不能直接转为std::string
+    QVariant v1     = 12;
+    QVariant v2;
+    v2.setValue(str); // 非Qt(C++)内置类型必须用setValue赋值
+    // QVariant v2 = "test";  //此时的v2只能转为QString，不能直接转为std::string
     QVariant v3;
     v3.setValue(2.0f);
     auto val1 = v3.value<float>();
     auto val2 = v3.toFloat();
 
-    bool can1 = v2.canConvert<float>();      //false
-    bool can2 = v2.canConvert<std::string>();//true
-    bool can3 = v2.canConvert<int>();        //false
-    bool can4 = v2.canConvert<QString>();    //false
+    bool can1 = v2.canConvert<float>();       // false
+    bool can2 = v2.canConvert<std::string>(); // true
+    bool can3 = v2.canConvert<int>();         // false
+    bool can4 = v2.canConvert<QString>();     // false
 
     auto val3 = v2.value<std::string>();
 
-    int arr[]{ 1,2,3 };
-    //保存
+    int arr[] { 1, 2, 3 };
+    // 保存
     QVariant varP = QVariant::fromValue((void*)arr);
-    //获取
+    // 获取
     int* r1 = (int*)varP.value<void*>();
 
-    QVariant v4; v4.setValue(r1); //此处不能用arr
+    QVariant v4;
+    v4.setValue(r1); // 此处不能用arr
     auto* r2 = v4.value<int*>();
 
-    std::vector<QVariant> vecVar{ v1,v2,v3,v4 };
+    std::vector<QVariant> vecVar { v1, v2, v3, v4 };
     auto ret = vecVar.front().value<float>();
 
     qDebug("test");
@@ -253,19 +253,20 @@ int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
     auto clipBoard = QApplication::clipboard();
-    //clipBoard->setText("test clip board 2");
-
+    // clipBoard->setText("test clip board 2");
+    // clang-format off
     unsigned char pixels[] = {
-        255,0,0,255,
-        255,0,0,255,
-        255,0,0,255,
-        255,0,0,255,
-        255,0,0,255,
-        255,0,0,255,
-        255,0,0,255,
-        255,0,0,255,
-        255,0,0,255,
+        255, 0, 0, 255,
+        255, 0, 0, 255,
+        255, 0, 0, 255,
+        255, 0, 0, 255,
+        255, 0, 0, 255,
+        255, 0, 0, 255,
+        255, 0, 0, 255,
+        255, 0, 0, 255,
+        255, 0, 0, 255,
     };
+    // clang-format on
     QImage image = QImage(pixels, 3, 3, QImage::Format_RGBA8888);
     clipBoard->setImage(image);
 
@@ -289,9 +290,9 @@ int main()
 
     var2.push_back(33);
     var2.append(22);
-    auto size = var2.size();
+    auto size  = var2.size();
     auto empty = var2.empty();
-    auto data = var2.data();
+    auto data  = var2.data();
 
     qDebug("test");
 }
@@ -306,9 +307,8 @@ int main()
 
 #include <cstring>
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
-
     // 定义整形值（数据类型可按自己意向更改）
     int val = 666;
     // 创建一个数据流对象，并设置数据容器和打开方式
@@ -321,7 +321,7 @@ int main(int argc,char** argv)
     // 创建一个数据流对象，并设置数据容器和打开方式
     QDataStream stream2(byteArray, QIODevice::ReadOnly);
     // 创建序列化值所对应的类型变量（如本类型转换前类型为int，接收类型也应与之对应）
-    int ret = 0;   // 初始化是和序列化值区分
+    int ret = 0; // 初始化是和序列化值区分
     // 通过'>>'运算符将数据从流中读出
     stream2 >> ret;
 
@@ -335,7 +335,6 @@ int main(int argc,char** argv)
 
     int test = 0;
 }
-
 
 #endif // TEST8
 
@@ -351,11 +350,14 @@ int main(int argc,char** argv)
 
 int main(int argc, char* argv[])
 {
-#define PrintResult(str) qDebug() << "Before:\t" << str;qDebug() << "After:\t" << str.replace(reg1, "image:url(./resource/newSvgFile.svg);");qDebug()<<"--------";
+#define PrintResult(str)                                                                  \
+    qDebug() << "Before:\t" << str;                                                       \
+    qDebug() << "After:\t" << str.replace(reg1, "image:url(./resource/newSvgFile.svg);"); \
+    qDebug() << "--------";
     // 替换
     {
-        QString r = "image:url(.*);";
-        QString s = "{image:url(./resource/test.svg);}this is a svg file.";
+        QString r  = "image:url(.*);";
+        QString s  = "{image:url(./resource/test.svg);}this is a svg file.";
         QString s1 = "{image:url();}this is a svg file.";
         QString s2 = "{image:url(******);}this is a svg file.";
         QString s3 = "{image:url((******);}))this is a svg file.";
@@ -366,7 +368,6 @@ int main(int argc, char* argv[])
         PrintResult(s1);
         PrintResult(s2);
         PrintResult(s3);
-
     }
 
     return 0;
@@ -376,11 +377,11 @@ int main(int argc, char* argv[])
 
 #ifdef TEST10
 
-#include <QtCore/QCoreApplication>
-#include <QJSEngine>  // cmake Qml
 #include <QDebug>
 #include <QFile>
+#include <QJSEngine> // cmake Qml
 #include <QTextStream>
+#include <QtCore/QCoreApplication>
 
 using namespace std;
 
@@ -388,9 +389,9 @@ int main(int argc, char* argv[])
 {
     QCoreApplication a(argc, argv);
     QJSEngine js;
-    QJSValue module = js.importModule("resource/math.mjs");
+    QJSValue module      = js.importModule("resource/math.mjs");
     QJSValue sumFunction = module.property("sum");
-    QString str = "38u48djhfod中国，@##@!_)+bia發財";
+    QString str          = "38u48djhfod中国，@##@!_)+bia發財";
     QJSValueList args;
     args << str;
     QJSValue result = sumFunction.call(args);
@@ -406,18 +407,18 @@ int main(int argc, char* argv[])
 
 #ifdef TEST11
 
+#include <QDebug>
+#include <QList>
 #include <QMap>
 #include <QSet>
-#include <QList>
-#include <QVector>
-#include <QDebug>
 #include <QString>
+#include <QVector>
 
 int main()
 {
     // QMap
     {
-        QMap<int, QString> theMap{ {1,"a"},{2,"b"} };
+        QMap<int, QString> theMap { { 1, "a" }, { 2, "b" } };
         qDebug() << theMap.size() << '\t' << theMap;
         qDebug() << theMap[1];
         theMap.insert(1, "c"); // 会覆盖key值相同的元素
@@ -433,7 +434,7 @@ int main()
         // Qt有如下定义
         // template<typename T> using QVector = QList<T>;
 
-        QVector<int> theVector{ 1,2,3,4,5 };
+        QVector<int> theVector { 1, 2, 3, 4, 5 };
         qDebug() << theVector.size() << '\t' << theVector;
     }
 
@@ -441,10 +442,32 @@ int main()
 
     // QList
     {
-        QList<int> theList{ 1,2,3,4,5 };
+        QList<int> theList { 1, 2, 3, 4, 5 };
         qDebug() << theList.size() << '\t' << theList;
     }
     return 0;
 }
 
 #endif // TEST11
+
+#ifdef TEST12
+
+#include <QDebug>
+#include <QResource>
+#include <iostream>
+
+int main(int argc, char** argv)
+{
+    qDebug() << "--------------------------------------------";
+
+    QResource res(":/myResources/test.txt");
+    std::cout << res.data() << '\n';
+    qDebug() << res.data();
+    qDebug() << res.fileName();
+    qDebug() << res.isValid();
+    qDebug() << res.size();
+
+    return 0;
+}
+
+#endif // TEST12
