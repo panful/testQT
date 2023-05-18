@@ -15,9 +15,10 @@
  * 14.事件过滤器 钩子 eventFilter
  * 15.安装事件过滤器
  * 16.QPainter绘制文字并保存为图片
+ * 17.保存tiff图片
  */
 
-#define TEST9
+#define TEST17
 
 #ifdef TEST1
 
@@ -114,9 +115,9 @@ int main(int argc, char* argv[])
     QApplication aa(argc, argv);
     QWidget w;
     // 以下是创建QAction 的方法
-    QAction* pa  = new QAction(QIcon("C:\\Users\\yangpan\\Pictures\\Saved Pictures\\test.jpg"), "", &w); // 含一图标、文本
-    QAction* pa1 = new QAction("disable", &w);                                                           // 仅有文本
-    QAction* pa2 = new QAction(&w);                                                                      // 既无图标也无文本
+    QAction* pa  = new QAction(QIcon("test.jpg"), "", &w); // 含一图标、文本
+    QAction* pa1 = new QAction("disable", &w);             // 仅有文本
+    QAction* pa2 = new QAction(&w);                        // 既无图标也无文本
     QAction* pa3 = new QAction("xxx", &w);
     // 为QAction 添加快捷键
     // pa->setShortcut(QKeySequence("Ctrl+G"));
@@ -452,7 +453,7 @@ int main(int argc, char** argv)
         std::cout << "is null\n";
 
         QPixmap p2;
-        p2.load("C:\\Users\\yangpan\\Desktop\\test.bmp");
+        p2.load("test.bmp");
         // p1 = p2.copy();
         p1 = p2;
     }
@@ -470,7 +471,7 @@ int main(int argc, char** argv)
     else
     {
         std::cout << "save\n";
-        p1.save("C:\\Users\\yangpan\\Desktop\\save.bmp");
+        p1.save("save.bmp");
     }
 
     return app.exec();
@@ -691,3 +692,82 @@ int main(int argc, char** argv)
 }
 
 #endif // TEST16
+
+#ifdef TEST17
+
+#include <QApplication>
+#include <QDebug>
+#include <QImage>
+#include <QImageWriter>
+
+void savePixelsAsTiff(const QString& filePath, const uchar* pixelData, int width, int height)
+{
+    // Create a QImage from the pixel data
+    QImage image(pixelData, width, height, QImage::Format_ARGB32);
+
+    // Create a QImageWriter with the TIFF format
+    QImageWriter writer(filePath);
+    writer.setFormat("TIFF");
+
+    // Set any additional options for the writer if needed
+    // For example, you can set the compression level:
+    // writer.setCompression(9);
+
+    // Write the image using the QImageWriter
+    if (!writer.write(image))
+    {
+        qDebug() << "Failed to save TIFF file:" << writer.errorString();
+    }
+    else
+    {
+        qDebug() << "TIFF file saved successfully.";
+    }
+}
+
+int main(int c, char** v)
+{
+    QApplication app(c, v);
+    const int width  = 640;
+    const int height = 480;
+    uchar* pixelData = new uchar[width * height * 4]();
+
+    // Fill the pixelData with your actual pixel values
+    for (size_t i = 0; i < width; i++)
+    {
+        for (size_t j = 0; j < height; j++)
+        {
+            if (i < 200)
+            {
+                pixelData[(i * height + j) * 4 + 0] = 255; // b
+                pixelData[(i * height + j) * 4 + 1] = 0;   // g
+                pixelData[(i * height + j) * 4 + 2] = 0;   // r
+                pixelData[(i * height + j) * 4 + 3] = 255; // a
+            }
+            else if (i < 400)
+            {
+                pixelData[(i * height + j) * 4 + 0] = 0;   // b
+                pixelData[(i * height + j) * 4 + 1] = 255; // g
+                pixelData[(i * height + j) * 4 + 2] = 0;   // r
+                pixelData[(i * height + j) * 4 + 3] = 128; // a
+            }
+            else
+            {
+                pixelData[(i * height + j) * 4 + 0] = 0;   // b
+                pixelData[(i * height + j) * 4 + 1] = 0;   // g
+                pixelData[(i * height + j) * 4 + 2] = 255; // r
+                pixelData[(i * height + j) * 4 + 3] = 255; // a
+            }
+        }
+    }
+
+    // 必须先创建好中文这个文件夹，否则保存失败
+    QString filePath = qApp->applicationDirPath() + "/中文/image.tiff";
+
+    qDebug() << filePath;
+
+    savePixelsAsTiff(filePath, pixelData, width, height);
+
+    delete[] pixelData;
+}
+
+#endif // TEST17
