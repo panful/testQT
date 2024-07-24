@@ -11,4 +11,3 @@ add_executable (${target_name} "main.cpp" "GLWidget.h" "GLWidget.cpp")
 target_link_libraries(${target_name} PRIVATE Qt6::Core Qt6::Widgets Qt6::OpenGLWidgets)
 target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-install(TARGETS ${target_name} RUNTIME DESTINATION .)

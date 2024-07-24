@@ -1,5 +1,3 @@
-cmake_minimum_required (VERSION 3.8)
-
 set(target_name "06_03_03_OpenGL_Attribute")
 
 add_executable (${target_name} "main.cpp")
@@ -11,7 +9,3 @@ set(CMAKE_AUTORCC OFF) # Resource Compiler
 set(CMAKE_AUTOUIC OFF) # User Interface Compiler
 
 target_link_libraries(${target_name} PRIVATE Qt6::Core Qt6::Widgets)
-
-install(TARGETS ${target_name}
-        RUNTIME DESTINATION ./
-)

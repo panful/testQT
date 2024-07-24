@@ -1,4 +1,3 @@
-cmake_minimum_required (VERSION 3.8)
 
 set(target_name "03_02_QmlCallCxx")
 
@@ -11,11 +10,5 @@ set(CMAKE_AUTORCC ON) # Resource Compiler
 set(CMAKE_AUTOUIC ON) # User Interface Compiler
 
 target_link_libraries(${target_name} PRIVATE Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick)
-
-install(TARGETS ${target_name}
-        RUNTIME DESTINATION ./
-)
-
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/03_02.qml DESTINATION ./)
 
 #target_sources(${target_name} PRIVATE 03_02.qml)
