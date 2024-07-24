@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 00. 自定义信号和槽
  * 01. QJson
  * 02. QJson QVariant QString 互相转换

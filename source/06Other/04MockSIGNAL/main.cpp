@@ -1,4 +1,4 @@
-﻿
+
 // 自定义信号槽机制 https://blog.csdn.net/langwang122/article/details/81238423
 
 #include <vector>

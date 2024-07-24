@@ -1,4 +1,4 @@
-﻿/*
+/*
 1. 重写QWidget测试
 2. QMdiArea 多文档窗口，注意和QStackedWidget的区别
 3. 黄勇 QDockWidget的使用及自定义标题栏部件

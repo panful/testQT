@@ -1,4 +1,4 @@
-﻿
+
 #include "window.h"
 #include "ui_test.h"  //ui文件自动生成的头文件，也可以通过uic工具手动生成
 

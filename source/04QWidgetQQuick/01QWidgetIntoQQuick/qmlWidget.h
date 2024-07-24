@@ -1,4 +1,4 @@
-﻿#ifndef QMLWIDGET_H
+#ifndef QMLWIDGET_H
 
 #define QMLWIDGET_H
 

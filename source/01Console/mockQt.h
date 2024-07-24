@@ -1,4 +1,4 @@
-﻿#include <QObject>
+#include <QObject>
 
 class MockQt :
     public QObject

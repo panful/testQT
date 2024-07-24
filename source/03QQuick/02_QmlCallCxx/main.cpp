@@ -1,4 +1,4 @@
-﻿
+
 /*
 1. setContextProperty qml调用C++函数
 2. qmlRegisterSingletonType qml调用C++函数

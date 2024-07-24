@@ -1,4 +1,4 @@
-﻿/* qss设置常见整理 https://blog.csdn.net/liunanya/article/details/111303629
+/* qss设置常见整理 https://blog.csdn.net/liunanya/article/details/111303629
 * 1.QSS入门 https://blog.csdn.net/zyhse/article/details/105907181/
 * 2.QSS属性 https://www.cnblogs.com/bclshuai/p/9809679.html
 * 3.加载*.qss文件

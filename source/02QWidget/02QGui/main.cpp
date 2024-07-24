@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 1. QLabel显示图片
  * 2. QMenu
  * 3. QMenu

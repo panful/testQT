@@ -1,4 +1,4 @@
-﻿#include "mockQt.h"
+#include "mockQt.h"
 #include <iostream>
 
 MockQt::MockQt() {
