@@ -46,7 +46,7 @@ void Widget::on_pushButton_clicked()
     int ret, got_picture;
     struct SwsContext* img_convert_ctx; // 主要用于视频图像的转换
 
-    char filepath[] = "resource/test.mp4"; // 当前目录为构建目录
+    char filepath[] = "../resource/test.mp4"; // 当前目录为构建目录
 
     // 注册FFMpeg的库
     av_register_all();

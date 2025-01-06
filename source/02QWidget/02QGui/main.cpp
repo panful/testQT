@@ -16,9 +16,10 @@
  * 15.安装事件过滤器
  * 16.QPainter绘制文字并保存为图片
  * 17.保存tiff图片
+ * 18.QGroupBox QCheckBox QRadioButton
  */
 
-#define TEST17
+#define TEST18
 
 #ifdef TEST1
 
@@ -68,7 +69,7 @@ int main(int argc, char* argv[])
     pm1.exec(); // 使用exec()函数显示菜单pm1
     return aa.exec();
 }
-#endif // TEST2
+#endif          // TEST2
 
 #ifdef TEST3
 
@@ -298,7 +299,7 @@ int main(int argc, char* argv[])
     // w.setMaximumSize(80,60);
     // w.setFixedSize(80,60);
     w.resize(800, 600);
-    w.move(100, 100); // 窗口左上角的位置
+    w.move(100, 100);                                                  // 窗口左上角的位置
     w.show();
 
     qDebug() << w.size();                                              // 客户区大小
@@ -307,9 +308,9 @@ int main(int argc, char* argv[])
     qDebug() << w.devicePixelRatioFScale();                            // 像素个数
     qDebug() << w.size() * w.devicePixelRatioF();
     qDebug() << "------------------------------------------";
-    qDebug() << w.geometry();      // 客户区，不包含标题栏和边框
-    qDebug() << w.frameGeometry(); // 整个窗口，包含标题栏和边框
-    qDebug() << w.frameSize();     // 整个窗口大小
+    qDebug() << w.geometry();                                          // 客户区，不包含标题栏和边框
+    qDebug() << w.frameGeometry();                                     // 整个窗口，包含标题栏和边框
+    qDebug() << w.frameSize();                                         // 整个窗口大小
 
     return a.exec();
 }
@@ -771,3 +772,58 @@ int main(int c, char** v)
 }
 
 #endif // TEST17
+
+#ifdef TEST18
+
+#include <QtWidgets>
+#include <iostream>
+
+int main(int argc, char* argv[])
+{
+    QApplication a(argc, argv);
+
+    QWidget w;
+    QGroupBox* box = new QGroupBox(&w);
+    box->move(33, 33);
+    box->resize(120, 150);
+
+    QGroupBox* box1 = new QGroupBox(&w);
+    box1->move(165, 33);
+    box1->resize(110, 75);
+
+    QButtonGroup* b = new QButtonGroup; // 按钮组
+    // 把按钮加入到组框
+    QRadioButton* rb1 = new QRadioButton("AAA", box);
+    QRadioButton* rb2 = new QRadioButton("BBB", box);
+    QCheckBox* cb1    = new QCheckBox("CCC", box);
+    QCheckBox* cb2    = new QCheckBox("DDD", box);
+    QCheckBox* cb3    = new QCheckBox("EEE", box1);
+    QCheckBox* cb4    = new QCheckBox("FFF", box1);
+
+    // 将属于同一组的按钮加入到按钮组b
+    b->addButton(rb1);
+    b->addButton(rb2);
+    b->addButton(cb1, 2);
+    b->addButton(cb2);
+
+    // 布局组框box 中的子部件
+    rb1->move(22, 22);
+    rb2->move(22, 50);
+    cb1->move(22, 77);
+    cb2->move(22, 105);
+
+    // 布局组框box1 中的子部件
+    cb3->move(22, 11);
+    cb4->move(22, 40);
+    box->setTitle("XXXXX");              // 设置标题
+    box->setAlignment(Qt::AlignHCenter); // 居中显示标题
+    box->setCheckable(true);             // 组框box 可被选中
+    //box1->setFlat(true);                 // 组框box1 无边框
+
+    w.resize(300, 200);
+    w.show();
+
+    return a.exec();
+}
+
+#endif // TEST18
