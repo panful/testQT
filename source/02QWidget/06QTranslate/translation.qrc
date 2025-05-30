@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/MyTranslation">
+        <file alias = "translation_zh_CN.qm">../../../resource/translation_zh_CN.qm</file>
+        <file alias = "translation_en_US.qm">../../../resource/translation_en_US.qm</file>
+    </qresource>
+</RCC>
