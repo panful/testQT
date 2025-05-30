@@ -4,10 +4,9 @@ set(CMAKE_AUTOUIC OFF) # User Interface Compiler
 
 set(target_name "06_03_01_01_QOpenGLWidget")
 
-find_package(Qt6 COMPONENTS REQUIRED Core Widgets OpenGLWidgets)
+find_package(Qt${SYSTEM_QT_MAJOR_VERSION} COMPONENTS REQUIRED Core Widgets OpenGLWidgets)
 
 add_executable (${target_name} "main.cpp" "GLWidget.h" "GLWidget.cpp")
 
-target_link_libraries(${target_name} PRIVATE Qt6::Core Qt6::Widgets Qt6::OpenGLWidgets)
+target_link_libraries(${target_name} PRIVATE Qt${SYSTEM_QT_MAJOR_VERSION}::Core Qt${SYSTEM_QT_MAJOR_VERSION}::Widgets Qt${SYSTEM_QT_MAJOR_VERSION}::OpenGLWidgets)
 target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-

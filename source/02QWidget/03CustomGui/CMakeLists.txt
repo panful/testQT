@@ -1,18 +1,15 @@
-
 set(target_name "02_03_CustomGui")
 
-set(CMAKE_AUTOUIC ON)
+find_package(Qt${SYSTEM_QT_MAJOR_VERSION} COMPONENTS Widgets OpenGLWidgets REQUIRED)
+
+set(CMAKE_AUTOUIC OFF)
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTORCC OFF)
 
-find_package(Qt6 COMPONENTS Widgets OpenGLWidgets REQUIRED)
+add_executable(${target_name} main.cpp widget.cpp widget.h)
 
-set(PROJECT_SOURCES
-        main.cpp
-        widget.cpp
-        widget.h
+target_link_libraries(${target_name}
+    PRIVATE
+        Qt${SYSTEM_QT_MAJOR_VERSION}::Core
+        Qt${SYSTEM_QT_MAJOR_VERSION}::Widgets
 )
-
-add_executable(${target_name} ${PROJECT_SOURCES})
-
-target_link_libraries(${target_name} PRIVATE Qt6::Widgets Qt6::OpenGLWidgets)

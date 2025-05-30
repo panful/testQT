@@ -3,7 +3,7 @@
 
 void GLWidget::initializeGL()
 {
-    initializeOpenGLFunctions()
+    initializeOpenGLFunctions();
     glClearColor(0.5, 0.5, 0.5, 0); // 设置背景色
 }
 
