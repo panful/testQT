@@ -12,7 +12,6 @@ add_executable (${target_name}
     "logorenderer.cpp" 
     "fboinsgrenderer.h" 
     "fboinsgrenderer.cpp" 
-    "03_03.qml"
 )
 
 target_link_libraries(${target_name}
@@ -21,4 +20,12 @@ target_link_libraries(${target_name}
         Qt${SYSTEM_QT_MAJOR_VERSION}::Gui
         Qt${SYSTEM_QT_MAJOR_VERSION}::Qml
         Qt${SYSTEM_QT_MAJOR_VERSION}::Quick
+)
+
+# 将 qml 文件拷贝到可执行文件目录
+add_custom_command(TARGET ${target_name}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_CURRENT_SOURCE_DIR}/03_03.qml"
+        "$<TARGET_FILE_DIR:${target_name}>/03_03.qml"
 )

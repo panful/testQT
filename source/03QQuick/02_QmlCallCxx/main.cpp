@@ -1,31 +1,38 @@
-
-/*
-1. setContextProperty qml调用C++函数
-2. qmlRegisterSingletonType qml调用C++函数
-3. qml
-*/
+/**
+ * 1. setContextProperty	适合小型项目/快速原型，简单直接，无需注册，全局变量污染，难以维护
+ * 2. qmlRegisterType QML_ELEMENT
+ */
 
 #define TEST1
 
 #ifdef TEST1
 
+#include "MyFunctions.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include "QDataMgr.h"
 
 int main(int argc, char* argv[])
 {
     QGuiApplication app(argc, argv);
-
     QQmlApplicationEngine engine;
-    QDataMgr data_mgr;
-    engine.rootContext()->setContextProperty("DATAMGR", &data_mgr);
-    engine.load(QUrl(QStringLiteral("03_02.qml")));
 
-    if (engine.rootObjects().isEmpty())
-        return -1;
+    // 创建 MyFunctions 实例并注册为 QML 全局属性
+    MyFunctions myFunctions;
+    engine.rootContext()->setContextProperty("myFunctions", &myFunctions);
 
+    const QUrl url(QStringLiteral("03_02_TEST1.qml"));
+    QObject::connect(
+        &engine,
+        &QQmlApplicationEngine::objectCreated,
+        &app,
+        [url](QObject* obj, const QUrl& objUrl) {
+            if (!obj && url == objUrl)
+                QCoreApplication::exit(-1);
+        },
+        Qt::QueuedConnection
+    );
+    engine.load(url);
 
     return app.exec();
 }
@@ -34,52 +41,33 @@ int main(int argc, char* argv[])
 
 #ifdef TEST2
 
+#include "MyFunctions.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include "qdatamgr.h"
-
-static QObject* qDataMgrSingletonFactory(QQmlEngine*, QJSEngine*)
-{
-    QDataMgr* dmgrGlobal = new QDataMgr();
-
-    return dmgrGlobal;
-}
-
 
 int main(int argc, char* argv[])
 {
     QGuiApplication app(argc, argv);
 
+    // 注册 MyFunctions 类型（命名空间可选）
+    qmlRegisterType<MyFunctions>("MyFunctions", 1, 0, "MyFunctions");
+
     QQmlApplicationEngine engine;
-    //qmlRegisterSingletonType<QDataMgr>("MyTestV", 2, 0, "DATAMGR", qDataMgrSingletonFactory);
-    qmlRegisterSingletonType<QDataMgr>("MyTestV", 2, 0, "DATAMGR", [](QQmlEngine*, QJSEngine*)->QObject* {return new QDataMgr(); });
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-
-    if (engine.rootObjects().isEmpty())
-        return -1;
-
+    const QUrl url(QStringLiteral("03_02_TEST2.qml"));
+    QObject::connect(
+        &engine,
+        &QQmlApplicationEngine::objectCreated,
+        &app,
+        [url](QObject* obj, const QUrl& objUrl) {
+            if (!obj && url == objUrl)
+                QCoreApplication::exit(-1);
+        },
+        Qt::QueuedConnection
+    );
+    engine.load(url);
 
     return app.exec();
 }
 
 #endif // TEST2
-
-#ifdef TEST3
-
-#include <QGuiApplication>
-#include <QQmlApplicationEngine>
-
-int main(int argc, char* argv[])
-{
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QGuiApplication app(argc, argv);
-
-    QQmlApplicationEngine engine;
-    engine.load(QUrl(QLatin1String("main.qml")));
-
-    return app.exec();
-}
-
-#endif // TEST3
-

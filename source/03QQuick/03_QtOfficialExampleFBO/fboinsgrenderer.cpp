@@ -1,13 +1,9 @@
-
 #include "fboinsgrenderer.h"
 #include "logorenderer.h"
-
-#include <QOpenGLFramebufferObject>
-
-#include <QtQuick/QQuickWindow>
-#include <qsgsimpletexturenode.h>
-
 #include <QDebug>
+#include <QOpenGLFramebufferObject>
+#include <QQuickWindow>
+#include <QSGSimpleTextureNode>
 
 class LogoInFboRenderer : public QQuickFramebufferObject::Renderer
 {
@@ -17,12 +13,14 @@ public:
         logo.initialize();
     }
 
-    void render() override {
+    void render() override
+    {
         logo.render();
         update();
     }
 
-    QOpenGLFramebufferObject *createFramebufferObject(const QSize &size) override {
+    QOpenGLFramebufferObject* createFramebufferObject(const QSize& size) override
+    {
         QOpenGLFramebufferObjectFormat format;
         format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
         format.setSamples(4);
@@ -32,7 +30,7 @@ public:
     LogoRenderer logo;
 };
 
-QQuickFramebufferObject::Renderer *FboInSGRenderer::createRenderer() const
+QQuickFramebufferObject::Renderer* FboInSGRenderer::createRenderer() const
 {
     qDebug() << " create Renderer ";
     return new LogoInFboRenderer();

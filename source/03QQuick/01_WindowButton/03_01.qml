@@ -6,8 +6,8 @@ Window{
     visible: true
     width: 450
     height: 450
-    title: qsTr("Test Window")  //窗口标题
-    color: "green"              //窗口背景色
+    title: qsTr("Test Window")  // 窗口标题
+    color: "green"              // 窗口背景色
 
     Button {
         text: "Quit";
