@@ -14,7 +14,7 @@
  * 12. QResource
  */
 
-#define TEST12
+#define TEST3
 
 #ifdef TEST0
 
@@ -159,28 +159,54 @@ int main()
 
 #ifdef TEST3
 
+#include <QDebug>
+#include <QObject>
 #include <QPointer>
-#include <iostream>
 
-class Test
-{
-public:
-    Test()
-    {
-        std::cout << "construct\n";
-    }
-
-    ~Test()
-    {
-        std::cout << "deconstruct\n";
-    }
-};
+// QPointer 是一个弱引用智能指针，仅用于 QObject
+// 专门用于管理 QObject 及其派生类对象的生命周期。它不会控制对象的销毁，但可以安全地检测对象是否已被删除
 
 int main()
 {
-    std::cout << " === test\n";
     {
-        QPointer<Test> t = QPointer<Test>::QPointer();
+        auto p = new QObject();
+        auto w = QPointer<QObject>(p);
+
+        if (p != nullptr)
+        {
+            qDebug() << "pointer is not nullptr";
+        }
+        if (w.isNull())
+        {
+            qDebug() << "1 QPointer is null";
+        }
+
+        delete p;
+
+        // 即使只 delete 没有置为 nullptr 也不会有问题
+        if (w.isNull())
+        {
+            qDebug() << "2 QPointer is null";
+        }
+
+        // 悬空指针
+        if (p != nullptr)
+        {
+            qDebug() << "pointer is not nullptr";
+        }
+    }
+
+    {
+        QPointer<QObject> pointer {};
+        pointer = new QObject();
+
+        auto a = pointer.data(); // a 的类型是 QObject*
+
+        auto func = [](QObject*) { };
+        func(pointer);           // 重载了 operator T* ，可以直接转换为 QObject*
+
+        pointer.clear();         // 等效于 pointer = nullptr;
+                                 // 不会将关联的 QObject 对象置空，这样会导致 new 出来的 QObject 对象没有释放
     }
 }
 
