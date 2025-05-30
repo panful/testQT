@@ -1,5 +1,12 @@
 <RCC>
-    <qresource prefix="/myResources">
-        <file alias="test.txt">file/test.txt</file>
+    <!-- 文本资源文件 -->
+    <qresource prefix="/MyText">
+        <!-- alias 表示使用别名简化，在CPP代码中访问 ":/MyText/test.txt" -->
+        <file alias = "test.txt">../../resource/test.txt</file>
+    </qresource>
+
+    <!-- 图片资源文件 -->
+    <qresource prefix="/MyImage">
+        <file alias = "test.png">../../resource/test.png</file>
     </qresource>
 </RCC>

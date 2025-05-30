@@ -1,0 +1,146 @@
+this is a test file
+
+#ifdef TEST3
+
+#include <QDebug>
+#include <QPointer>
+
+// QPointer 是一个弱引用智能指针，仅用于 QObject
+// 专门用于管理 QObject 及其派生类对象的生命周期。它不会控制对象的销毁，但可以安全地检测对象是否已被删除
+
+int main()
+{
+    {
+        auto p = new QObject();
+        auto w = QPointer<QObject>(p);
+
+        if (p != nullptr)
+        {
+            qDebug() << "pointer is not nullptr";
+        }
+        if (w.isNull())
+        {
+            qDebug() << "1 QPointer is null";
+        }
+
+        delete p;
+
+        // 即使只 delete 没有置为 nullptr 也不会有问题
+        if (w.isNull())
+        {
+            qDebug() << "2 QPointer is null";
+        }
+
+        // 悬空指针
+        if (p != nullptr)
+        {
+            qDebug() << "pointer is not nullptr";
+        }
+    }
+
+    {
+        QPointer<QObject> pointer {};
+        pointer = new QObject();
+
+        auto a = pointer.data(); // a 的类型是 QObject*
+
+        auto func = [](QObject*) { };
+        func(pointer);           // 重载了 operator T* ，可以直接转换为 QObject*
+
+        pointer.clear();         // 等效于 pointer = nullptr;
+                                 // 不会将关联的 QObject 对象置空，这样会导致 new 出来的 QObject 对象没有释放
+    }
+}
+
+#endif // TEST3
+
+
+===================================================================================================
+
+================================================================================================
+
+===================================================================================================
+
+===================================================================================================
+
+
+===================================================================================================
+#include "MainWindow.h"
+#include <QApplication>
+#include <QTranslator>
+
+// ts 文件生成 qm 文件
+// 命令行执行： lrelease.exe input.ts -qm output.qm
+
+int main(int argc, char* argv[])
+{
+    QApplication app(argc, argv);
+
+    // 安装应用程序翻译
+    QTranslator appTranslator;
+    // if (appTranslator.load(QLocale(), "translation", "_", ":/MyTranslate"))
+    if (appTranslator.load(":/MyTranslate/translation_en_US.qm"))
+    {
+        app.installTranslator(&appTranslator);
+    }
+
+    MainWindow window {};
+    window.show();
+
+    return app.exec();
+}
+
+
+#include "MainWindow.h"
+#include <QApplication>
+#include <QDebug>
+#include <QPushButton>
+
+#include <QVBoxLayout>
+
+MainWindow::MainWindow(QWidget* parent)
+    : QMainWindow(parent)
+{
+    QWidget* centralWidget = new QWidget(this);
+    QVBoxLayout* layout    = new QVBoxLayout(centralWidget);
+
+    m_button        = new QPushButton(tr("Hello World!"), this);
+    m_englishButton = new QPushButton(tr("English"), this);
+    m_chineseButton = new QPushButton(tr("Chinese"), this);
+
+    layout->addWidget(m_button);
+    layout->addWidget(m_englishButton);
+    layout->addWidget(m_chineseButton);
+
+    setCentralWidget(centralWidget);
+}
+
+
+#pragma once
+
+#include <QMainWindow>
+
+class QPushButton;
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    MainWindow(QWidget* parent = nullptr);
+
+private:
+    QPushButton* m_button;
+    QPushButton* m_englishButton;
+    QPushButton* m_chineseButton;
+};
+
+
+<RCC>
+    <qresource prefix="/MyTranslate">
+        <file alias = "translation_zh_CN.qm">../../../resource/translation_zh_CN.qm</file>
+        <file alias = "translation_en_US.qm">../../../resource/translation_en_US.qm</file>
+    </qresource>
+</RCC>
+
+===================================================================================================

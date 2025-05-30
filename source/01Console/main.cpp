@@ -90,7 +90,9 @@ int main()
     qDebug() << json;
 
     //--
-    QJsonObject object { { "error", QString::fromStdString("std string") } };
+    QJsonObject object {
+        {"error", QString::fromStdString("std string")}
+    };
 
     auto json3 = QJsonDocument::fromJson((object));
 
@@ -224,7 +226,7 @@ int main()
 
     auto val3 = v2.value<std::string>();
 
-    int arr[] { 1, 2, 3 };
+    int arr[] {1, 2, 3};
     // 保存
     QVariant varP = QVariant::fromValue((void*)arr);
     // 获取
@@ -234,7 +236,7 @@ int main()
     v4.setValue(r1); // 此处不能用arr
     auto* r2 = v4.value<int*>();
 
-    std::vector<QVariant> vecVar { v1, v2, v3, v4 };
+    std::vector<QVariant> vecVar {v1, v2, v3, v4};
     auto ret = vecVar.front().value<float>();
 
     qDebug("test");
@@ -418,7 +420,10 @@ int main()
 {
     // QMap
     {
-        QMap<int, QString> theMap { { 1, "a" }, { 2, "b" } };
+        QMap<int, QString> theMap {
+            {1, "a"},
+            {2, "b"}
+        };
         qDebug() << theMap.size() << '\t' << theMap;
         qDebug() << theMap[1];
         theMap.insert(1, "c"); // 会覆盖key值相同的元素
@@ -434,7 +439,7 @@ int main()
         // Qt有如下定义
         // template<typename T> using QVector = QList<T>;
 
-        QVector<int> theVector { 1, 2, 3, 4, 5 };
+        QVector<int> theVector {1, 2, 3, 4, 5};
         qDebug() << theVector.size() << '\t' << theVector;
     }
 
@@ -442,7 +447,7 @@ int main()
 
     // QList
     {
-        QList<int> theList { 1, 2, 3, 4, 5 };
+        QList<int> theList {1, 2, 3, 4, 5};
         qDebug() << theList.size() << '\t' << theList;
     }
     return 0;
@@ -453,19 +458,33 @@ int main()
 #ifdef TEST12
 
 #include <QDebug>
+#include <QDir>
+#include <QImage>
 #include <QResource>
-#include <iostream>
 
 int main(int argc, char** argv)
 {
-    qDebug() << "--------------------------------------------";
+    qDebug() << "Current working directory:" << QDir::currentPath();
 
-    QResource res(":/myResources/test.txt");
-    std::cout << res.data() << '\n';
-    qDebug() << res.data();
-    qDebug() << res.fileName();
-    qDebug() << res.isValid();
-    qDebug() << res.size();
+    qDebug() << "--------------------------------------------";
+    QResource text(":/MyText/test.txt");
+    qDebug() << "isValid: " << text.isValid();
+    qDebug() << "pointer: " << text.data();
+    qDebug() << "fileName: " << text.fileName();
+    qDebug() << "size: " << text.size();
+
+    qDebug() << "--------------------------------------------";
+    QResource png(":/MyImage/test.png");
+    qDebug() << "isValid: " << png.isValid();
+    qDebug() << "pointer: " << png.data();
+    qDebug() << "fileName: " << png.fileName();
+    qDebug() << "size: " << png.size();
+
+    qDebug() << "--------------------------------------------";
+    QImage image(":/MyImage/test.png");
+    qDebug() << "isNull: " << image.isNull();
+    qDebug() << "size: " << image.size();
+    qDebug() << "format: " << image.format();
 
     return 0;
 }
